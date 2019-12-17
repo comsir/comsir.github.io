@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
-    <title>contos单机安装hdfs</title>
-    <url>/2019/12/17/contos%E5%8D%95%E6%9C%BA%E5%AE%89%E8%A3%85hdfs/</url>
-    <content><![CDATA[<p>背景：本文介绍在centos中安装单机版的hdfs,供学习测试hdfs用。</p>
+    <title>contos7单机安装hdfs</title>
+    <url>/2019/12/17/contos7%E5%8D%95%E6%9C%BA%E5%AE%89%E8%A3%85hdfs/</url>
+    <content><![CDATA[<p>背景：本文介绍在centos7中安装单机版的hdfs,供学习测试hdfs用。</p>
 <a id="more"></a>
 <ol>
 <li>VMware15 </li>
