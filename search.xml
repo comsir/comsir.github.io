@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<search>
+  <entry>
+    <title>contos单机安装hdfs</title>
+    <url>/2019/12/17/contos%E5%8D%95%E6%9C%BA%E5%AE%89%E8%A3%85hdfs/</url>
+    <content><![CDATA[<p>背景：本文介绍在centos中安装单机版的hdfs,供学习测试hdfs用。</p>
+<a id="more"></a>
+<ol>
+<li>VMware15 </li>
+<li>centos7</li>
+<li>在非root目录下操作</li>
+<li>jdk1.8.0_231</li>
+<li>hadoop-3.1.3</li>
+</ol>
+<p><strong>一、配置JDK环境</strong></p>
+<p>参考上一篇文章 <a href="https://blog.csdn.net/qq_31963719/article/details/103305446" target="_blank" rel="noopener">文章链接</a></p>
+<p><strong>二、配置免密登入</strong></p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">ssh-keygen -t rsa</span><br><span class="line">cd ~&#x2F;.ssh</span><br><span class="line">cat id_rsa.pub&gt;&gt;authorized_keys</span><br><span class="line">#如果不能绵密登录，执行以下命令</span><br><span class="line">chmod 710 authorized_keys</span><br></pre></td></tr></table></figure>
+<p>测试是否配置成功</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">[song@master ~]$ ssh localhost</span><br><span class="line">Last login: Fri Nov 29 10:04:31 2019 from 192.168.91.1</span><br></pre></td></tr></table></figure>
+<p>如上情况 说明配置成功</p>
+<p><strong>三、下载hadoop</strong><br>官网下载比较慢 推荐几个国内的镜像网站：(开源软件的镜像基本都有)</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">http:&#x2F;&#x2F;mirror.bit.edu.cn&#x2F;apache&#x2F;hadoop&#x2F;common&#x2F;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">http:&#x2F;&#x2F;mirrors.hust.edu.cn&#x2F;apache&#x2F;hadoop&#x2F;common</span><br></pre></td></tr></table></figure>
+<p>用的版本是<strong>hadoop-3.1.3.tar.gz</strong><br>用 liunx 命令 <strong>rz</strong> 上传到自己的目录/home/song/soft</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">[song@master soft]$ ll</span><br><span class="line">drwxr-xr-x. 10 song song       161 Nov 28 13:34 hadoop-3.1.3</span><br><span class="line">-rw-r--r--.  1 song song 338075860 Nov 27 22:21 hadoop-3.1.3.tar.gz</span><br></pre></td></tr></table></figure>
+<p>解压：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">tar -zxvf hadoop-3.1.3.tar.gz</span><br></pre></td></tr></table></figure>
+<p><strong>四、配置文件</strong><br>1.配置hadoop-env.sh</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">cd hadoop-3.1.3</span><br><span class="line">vim etc&#x2F;hadoop&#x2F;hadoop-env.sh</span><br></pre></td></tr></table></figure>
+<p>添加JDK路径</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">export JAVA_HOME&#x3D;&#x2F;home&#x2F;song&#x2F;soft&#x2F;jdk1.8.0_231</span><br></pre></td></tr></table></figure>
+<p>2.配置core-site.xml</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">cd hadoop-3.1.3</span><br><span class="line">vim etc&#x2F;hadoop&#x2F;core-site.xml</span><br></pre></td></tr></table></figure>
+<p>在&lt;configuration 中配置property</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&lt;!-- 指定HDFS的（namenode）的通信地址 --&gt;</span><br><span class="line">&lt;property&gt;</span><br><span class="line">    &lt;name&gt;fs.defaultFS&lt;&#x2F;name&gt;</span><br><span class="line">    &lt;value&gt;hdfs:&#x2F;&#x2F;master(自己的hostname):9000&lt;&#x2F;value&gt;</span><br><span class="line">&lt;&#x2F;property&gt;</span><br><span class="line">&lt;!-- 指定hadoop运行时产生文件的存储路径 --&gt;</span><br><span class="line">&lt;property&gt;</span><br><span class="line">    &lt;name&gt;hadoop.tmp.dir&lt;&#x2F;name&gt;</span><br><span class="line">    &lt;value&gt;&#x2F;home&#x2F;song&#x2F;tmp&#x2F;hadoop&#x2F;tmp(自己的路径)&lt;&#x2F;value&gt;</span><br><span class="line">&lt;&#x2F;property&gt;</span><br></pre></td></tr></table></figure>
+<p>3.配置 hdfs-site.xml</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">cd hadoop-3.1.3</span><br><span class="line">vim etc&#x2F;hadoop&#x2F;hdfs-site.xml</span><br></pre></td></tr></table></figure>
+<p>在&lt;configuration 中配置property</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">  &lt;property&gt;</span><br><span class="line">      &lt;name&gt;dfs.name.dir&lt;&#x2F;name&gt;</span><br><span class="line">      &lt;value&gt;&#x2F;home&#x2F;song&#x2F;tmp&#x2F;hadoop&#x2F;hdfs&#x2F;name&lt;&#x2F;value&gt;</span><br><span class="line">  &lt;&#x2F;property&gt;</span><br><span class="line">  &lt;property&gt;</span><br><span class="line">      &lt;name&gt;dfs.data.dir&lt;&#x2F;name&gt;</span><br><span class="line">      &lt;value&gt;&#x2F;home&#x2F;song&#x2F;tmp&#x2F;hadoop&#x2F;hdfs&#x2F;data&lt;&#x2F;value&gt;</span><br><span class="line">  &lt;&#x2F;property&gt;</span><br><span class="line">  &lt;!-- 设置hdfs副本数量 --&gt;</span><br><span class="line">  &lt;property&gt;</span><br><span class="line">      &lt;name&gt;dfs.replication&lt;&#x2F;name&gt;</span><br><span class="line">      &lt;value&gt;1&lt;&#x2F;value&gt;</span><br><span class="line">  &lt;&#x2F;property&gt;</span><br><span class="line">&lt;!--hdfs的访问权限设置为false--&gt;</span><br><span class="line">  &lt;property&gt;</span><br><span class="line">         &lt;name&gt;dfs.permissions&lt;&#x2F;name&gt;</span><br><span class="line">         &lt;value&gt;false&lt;&#x2F;value&gt;</span><br><span class="line">  &lt;&#x2F;property&gt;</span><br><span class="line">  &lt;!--web界面访问--&gt;</span><br><span class="line">  &lt;property&gt;</span><br><span class="line">         &lt;name&gt;dfs.http.address&lt;&#x2F;name&gt;</span><br><span class="line">         &lt;value&gt;192.168.91.101(自己的主机IP):50070&lt;&#x2F;value&gt;</span><br><span class="line">  &lt;&#x2F;property&gt;</span><br><span class="line">  &lt;!--开启webhdfs--&gt;</span><br><span class="line">  &lt;property&gt;</span><br><span class="line">        &lt;name&gt;dfs.webhdfs.enabled&lt;&#x2F;name&gt;</span><br><span class="line">        &lt;value&gt;true&lt;&#x2F;value&gt;</span><br><span class="line">  &lt;&#x2F;property&gt;</span><br></pre></td></tr></table></figure>
+<p><strong>五、启动hdfs</strong><br>第一次启动需要格式化namenode</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">hdfs namenode -format</span><br></pre></td></tr></table></figure>
+<p>格式化完 启动hdfs</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">cd hadoop-3.1.3</span><br><span class="line">.&#x2F;sbin&#x2F;start-dfs.sh</span><br></pre></td></tr></table></figure>
+<p>启动成功（我的主机名叫master）</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">Starting namenodes on [master]</span><br><span class="line">Starting datanodes</span><br><span class="line">Starting secondary namenodes [master]</span><br></pre></td></tr></table></figure>
+<p>jps查看启动的进程</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">3892 NameNode</span><br><span class="line">4038 DataNode</span><br><span class="line">4221 SecondaryNameNode</span><br></pre></td></tr></table></figure>
+<p>最后就是在浏览器中测试</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">http:&#x2F;&#x2F;192.168.91.101(自己机器的IP):50070&#x2F;</span><br></pre></td></tr></table></figure>]]></content>
+  </entry>
+  <entry>
+    <title>Say hello to the world</title>
+    <url>/2019/12/17/Say-hello-to-the-world/</url>
+    <content><![CDATA[<p>博学之，审问之，慎思之</p>
+]]></content>
+  </entry>
+</search>
