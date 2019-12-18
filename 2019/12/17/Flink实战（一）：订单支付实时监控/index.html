@@ -1,0 +1,538 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.1.1">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+
+
+<script id="hexo-configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    hostname: new URL('http://yoursite.com').hostname,
+    root: '/',
+    scheme: 'Mist',
+    version: '7.6.0',
+    exturl: false,
+    sidebar: {"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},
+    copycode: {"enable":false,"show_result":false,"style":null},
+    back2top: {"enable":true,"sidebar":false,"scrollpercent":false},
+    bookmark: {"enable":false,"color":"#222","save":"auto"},
+    fancybox: false,
+    mediumzoom: false,
+    lazyload: false,
+    pangu: false,
+    comments: {"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},
+    algolia: {
+      appID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
+    path: 'search.xml',
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}
+  };
+</script>
+
+  <meta name="description" content="一、背景​        在电商平台中，最终创造收入和利润的是用户下单购买的环节；更具体一点，是用户真正完成支付动作的时候。用户下单的行为可以表明用户对商品的需求，但在现实中，并不是每次下单都会被用户立刻支付。当拖延一段时间后，用户支付的意愿会降低。所以为了让用户更有紧迫感从而提高支付转化率，同时也为了防范订单支付环节的安全风险，电商网站往往会对订单状态进行监控，设置一个失效时间（比如15分钟），">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Flink实战（一）：订单支付实时监控">
+<meta property="og:url" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2019&#x2F;12&#x2F;17&#x2F;Flink%E5%AE%9E%E6%88%98%EF%BC%88%E4%B8%80%EF%BC%89%EF%BC%9A%E8%AE%A2%E5%8D%95%E6%94%AF%E4%BB%98%E5%AE%9E%E6%97%B6%E7%9B%91%E6%8E%A7&#x2F;index.html">
+<meta property="og:site_name" content="Comsir&#39;s Blog">
+<meta property="og:description" content="一、背景​        在电商平台中，最终创造收入和利润的是用户下单购买的环节；更具体一点，是用户真正完成支付动作的时候。用户下单的行为可以表明用户对商品的需求，但在现实中，并不是每次下单都会被用户立刻支付。当拖延一段时间后，用户支付的意愿会降低。所以为了让用户更有紧迫感从而提高支付转化率，同时也为了防范订单支付环节的安全风险，电商网站往往会对订单状态进行监控，设置一个失效时间（比如15分钟），">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2019-12-17T13:14:07.000Z">
+<meta property="article:modified_time" content="2019-12-17T14:20:07.654Z">
+<meta property="article:author" content="lingcheng">
+<meta property="article:tag" content="Flink">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="http://yoursite.com/2019/12/17/Flink%E5%AE%9E%E6%88%98%EF%BC%88%E4%B8%80%EF%BC%89%EF%BC%9A%E8%AE%A2%E5%8D%95%E6%94%AF%E4%BB%98%E5%AE%9E%E6%97%B6%E7%9B%91%E6%8E%A7/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: true
+  };
+</script>
+
+  <title>Flink实战（一）：订单支付实时监控 | Comsir's Blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Comsir's Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+  </div>
+
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-fw fa-user"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-fw fa-th"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>归档</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+
+</nav>
+  <div class="site-search">
+    <div class="popup search-popup">
+    <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocorrect="off" autocapitalize="none"
+           placeholder="搜索..." spellcheck="false"
+           type="text" id="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result"></div>
+
+</div>
+<div class="search-pop-overlay"></div>
+
+  </div>
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content">
+            
+
+  <div class="posts-expand">
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/12/17/Flink%E5%AE%9E%E6%88%98%EF%BC%88%E4%B8%80%EF%BC%89%EF%BC%9A%E8%AE%A2%E5%8D%95%E6%94%AF%E4%BB%98%E5%AE%9E%E6%97%B6%E7%9B%91%E6%8E%A7/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/touxiang.jpg">
+      <meta itemprop="name" content="lingcheng">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Comsir's Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Flink实战（一）：订单支付实时监控
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2019-12-17 21:14:07 / 修改时间：22:20:07" itemprop="dateCreated datePublished" datetime="2019-12-17T21:14:07+08:00">2019-12-17</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Flink/" itemprop="url" rel="index">
+                    <span itemprop="name">Flink</span>
+                  </a>
+                </span>
+            </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h4 id="一、背景"><a href="#一、背景" class="headerlink" title="一、背景"></a>一、背景</h4><p>​        在电商平台中，最终创造收入和利润的是用户下单购买的环节；更具体一点，是用户真正完成支付动作的时候。用户下单的行为可以表明用户对商品的需求，但在现实中，并不是每次下单都会被用户立刻支付。当拖延一段时间后，用户支付的意愿会降低。所以为了让用户更有紧迫感从而提高支付转化率，同时也为了防范订单支付环节的安全风险，电商网站往往会对订单状态进行监控，设置一个失效时间（比如15分钟），如果下单后一段时间仍未支付，订单就会被取消。</p>
+<p>​        本文将使用<strong>FlinkCEP</strong>库来实现这个功能。</p>
+<a id="more"></a>
+
+<h4 id="二、基本需求"><a href="#二、基本需求" class="headerlink" title="二、基本需求"></a>二、基本需求</h4><p>​    1.用户下单之后，应设置订单失效时间，以提高用户支付的意愿，并降低系统风险</p>
+<p>​    2.用户下单后15分钟未支付，则输出监控信息</p>
+<h4 id="三、解决思路"><a href="#三、解决思路" class="headerlink" title="三、解决思路"></a>三、解决思路</h4><p>​    利用 CEP 库进行事件流的模式匹配，并设定匹配的时间间隔。</p>
+<h4 id="四、具体实验步骤"><a href="#四、具体实验步骤" class="headerlink" title="四、具体实验步骤"></a>四、具体实验步骤</h4><p>我们简化数据为：用户ID（orderId Long），事件类型（eventType String）,事件时间（eventTime Long）。</p>
+<p>其中时间类型包括：create 和 pay</p>
+<p>我们先将事件流按照订单号orderId分流，然后定义这样的一个事件模式：在15分钟内，事件“create”与“pay”非严格连续</p>
+<h6 id="1-创建maven工程"><a href="#1-创建maven工程" class="headerlink" title="1.创建maven工程"></a>1.创建maven工程</h6><p>​    可以叫做OrderTimeoutDetect。</p>
+<h6 id="2-配置pom文件"><a href="#2-配置pom文件" class="headerlink" title="2.配置pom文件"></a>2.配置pom文件</h6><p>因为需要使用CEP库 所以要引入相关依赖 </p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&lt;dependency&gt;</span><br><span class="line">          &lt;groupId&gt;org.apache.flink&lt;/groupId&gt;</span><br><span class="line">          &lt;artifactId&gt;flink-cep_2.11&lt;/artifactId&gt;</span><br><span class="line">          &lt;version&gt;1.9.1&lt;/version&gt;</span><br><span class="line">      &lt;/dependency&gt;</span><br></pre></td></tr></table></figure>
+
+<p>其他还有Flink通用的依赖</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">&lt;dependency&gt;</span><br><span class="line">          &lt;groupId&gt;org.apache.flink&lt;/groupId&gt;</span><br><span class="line">          &lt;artifactId&gt;flink-java&lt;/artifactId&gt;</span><br><span class="line">          &lt;version&gt;1.9.1&lt;/version&gt;</span><br><span class="line">      &lt;/dependency&gt;</span><br><span class="line">      &lt;dependency&gt;</span><br><span class="line">          &lt;groupId&gt;org.apache.flink&lt;/groupId&gt;</span><br><span class="line">          &lt;artifactId&gt;flink-streaming-java_2.11&lt;/artifactId&gt;</span><br><span class="line">          &lt;version&gt;1.9.1&lt;/version&gt;</span><br><span class="line">      &lt;/dependency&gt;</span><br></pre></td></tr></table></figure>
+
+<p>编译打包方式官方推荐用maven-shade-plugin。<a href="https://github.com/comsir/Flink-UserBehaviorAnalysis/blob/master/pom.xml" target="_blank" rel="noopener">完整pom链接</a></p>
+<h6 id="3-定义POJO"><a href="#3-定义POJO" class="headerlink" title="3.定义POJO"></a>3.定义POJO</h6><p>定义OrderEvent <a href="https://github.com/comsir/Flink-UserBehaviorAnalysis/blob/master/OrderTimeoutDetect/src/main/java/OrderEvent.java" target="_blank" rel="noopener">完整类</a>输入的订单事件流；另外定义OrderResult <a href="https://github.com/comsir/Flink-UserBehaviorAnalysis/blob/master/OrderTimeoutDetect/src/main/java/OrderResult.java" target="_blank" rel="noopener">完整类</a>为输出显示的订单状态结果。</p>
+<h6 id="4-创建主类OrderTimeout"><a href="#4-创建主类OrderTimeout" class="headerlink" title="4.创建主类OrderTimeout"></a>4.创建主类OrderTimeout</h6><p>先创建流作业的环境已经简单的配置 使用的是事件时间</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();</span><br><span class="line">env.setStreamTimeCharacteristic(TimeCharacteristic.EventTime);</span><br><span class="line">env.setParallelism(<span class="number">1</span>);</span><br></pre></td></tr></table></figure>
+
+<p>测试用的自定义数据</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">DataStream&lt;OrderEvent&gt; dataSource = env.fromCollection(Arrays.asList(</span><br><span class="line">                <span class="keyword">new</span> OrderEvent(<span class="number">1L</span>, <span class="string">"create"</span>, <span class="number">1558430842L</span>),</span><br><span class="line">                <span class="keyword">new</span> OrderEvent(<span class="number">2L</span>, <span class="string">"create"</span>, <span class="number">1558430843L</span>),</span><br><span class="line">                <span class="keyword">new</span> OrderEvent(<span class="number">2L</span>, <span class="string">"pay"</span>, <span class="number">1558430844L</span>)</span><br><span class="line">        ))</span><br></pre></td></tr></table></figure>
+
+<p>有了数据源之后，我们需要对数据流按照orderId做keyby分流</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">KeyedStream&lt;OrderEvent, Long&gt; orderEventStream = dataSource.assignTimzestampsAndWatermarks(<span class="keyword">new</span> AscendingTimestampExtractor&lt;OrderEvent&gt;() &#123;</span><br><span class="line">            <span class="meta">@Override</span></span><br><span class="line">            <span class="function"><span class="keyword">public</span> <span class="keyword">long</span> <span class="title">extractAscendingTimestamp</span><span class="params">(OrderEvent element)</span> </span>&#123;</span><br><span class="line">                <span class="keyword">return</span> element.getEventTime() * <span class="number">1000</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;)</span><br><span class="line">                .keyBy(<span class="keyword">new</span> KeySelector&lt;OrderEvent, Long&gt;() &#123;</span><br><span class="line">                    <span class="meta">@Override</span></span><br><span class="line">                    <span class="function"><span class="keyword">public</span> Long <span class="title">getKey</span><span class="params">(OrderEvent value)</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">                        <span class="keyword">return</span> value.getOrderId();</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;);</span><br></pre></td></tr></table></figure>
+
+<p>在做keyBy之前日常加上waterMark。因为我们这里的时间的顺序的 所以用assignTimzestampsAndWatermarks就行，生产中很少用。</p>
+<p>这样就得到了一个KeyedStream，留着备用。</p>
+<h6 id="5-定义Pattern-匹配模式"><a href="#5-定义Pattern-匹配模式" class="headerlink" title="5.定义Pattern 匹配模式"></a>5.定义Pattern 匹配模式</h6><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">Pattern&lt;OrderEvent, OrderEvent&gt; OrderPayPattern = Pattern.&lt;OrderEvent&gt;begin(<span class="string">"begin"</span>).where(<span class="keyword">new</span> SimpleCondition&lt;OrderEvent&gt;() &#123;</span><br><span class="line">            <span class="meta">@Override</span></span><br><span class="line">            <span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">filter</span><span class="params">(OrderEvent value)</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">                <span class="keyword">return</span> value.getEventType().equals(<span class="string">"create"</span>);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;)</span><br><span class="line">        <span class="comment">//非严格连续 </span></span><br><span class="line">        .followedBy(<span class="string">"follow"</span>).where(<span class="keyword">new</span> SimpleCondition&lt;OrderEvent&gt;() &#123;</span><br><span class="line">            <span class="meta">@Override</span></span><br><span class="line">            <span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">filter</span><span class="params">(OrderEvent value)</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">                <span class="keyword">return</span> value.getEventType().equals(<span class="string">"pay"</span>);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;)</span><br><span class="line">    <span class="comment">//设定超时时间</span></span><br><span class="line">    .within(Time.seconds(<span class="number">15</span>));</span><br></pre></td></tr></table></figure>
+
+<h6 id="6-定义标签"><a href="#6-定义标签" class="headerlink" title="6.定义标签"></a>6.定义标签</h6><p>定义超时支付的输出标签，用标签sideOutput</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">OutputTag&lt;OrderResult&gt; orderTimeoutOutput = <span class="keyword">new</span> OutputTag&lt;OrderResult&gt;(<span class="string">"orderTimeout"</span>)&#123;&#125;;</span><br></pre></td></tr></table></figure>
+
+<p><strong>特别注意：不是简单的new 一个类，是一个匿名内部类</strong></p>
+<h6 id="7-数据流绑定pattern"><a href="#7-数据流绑定pattern" class="headerlink" title="7.数据流绑定pattern"></a>7.数据流绑定pattern</h6><p>将keyBy后的流绑定模式 keyedStream转换成patternStream</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">PatternStream&lt;OrderEvent&gt; patternStream = CEP.pattern(orderEventStream, OrderPayPattern);</span><br></pre></td></tr></table></figure>
+
+<h6 id="8-获取匹配到的数据流"><a href="#8-获取匹配到的数据流" class="headerlink" title="8.获取匹配到的数据流"></a>8.获取匹配到的数据流</h6><p>从patternStream中获取匹配的流（包括超时的和正常的  等等要分别处理）</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">DataStream&lt;OrderResult&gt; completedDataStream = patternStream.select(</span><br><span class="line">   <span class="comment">//第一个参数 刚定义的超时输出的标签 </span></span><br><span class="line">   orderTimeoutOutput, </span><br><span class="line">   <span class="comment">//第二个参数 处理超时的流</span></span><br><span class="line">   <span class="keyword">new</span> PatternTimeoutFunction&lt;OrderEvent, OrderResult&gt;() &#123;</span><br><span class="line">                <span class="meta">@Override</span></span><br><span class="line">                <span class="function"><span class="keyword">public</span> OrderResult <span class="title">timeout</span><span class="params">(Map&lt;String, List&lt;OrderEvent&gt;&gt; pattern, <span class="keyword">long</span> timeoutTimestamp)</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">                    Long timeoutOrderId = pattern.getOrDefault(<span class="string">"begin"</span>, <span class="keyword">null</span>).iterator().next().getOrderId();</span><br><span class="line">                    <span class="keyword">return</span> <span class="keyword">new</span> OrderResult(timeoutOrderId, <span class="string">"timeout"</span>);</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;,</span><br><span class="line">     <span class="comment">//第三个参数 处理正常的流</span></span><br><span class="line">     <span class="keyword">new</span> PatternSelectFunction&lt;OrderEvent, OrderResult&gt;() &#123;</span><br><span class="line">                <span class="meta">@Override</span></span><br><span class="line">                <span class="function"><span class="keyword">public</span> OrderResult <span class="title">select</span><span class="params">(Map&lt;String, List&lt;OrderEvent&gt;&gt; pattern)</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">                    Long payOrderId = pattern.getOrDefault(<span class="string">"follow"</span>, <span class="keyword">null</span>).iterator().next().getOrderId();</span><br><span class="line">                    <span class="keyword">return</span> <span class="keyword">new</span> OrderResult(payOrderId, <span class="string">"success"</span>);</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;);</span><br></pre></td></tr></table></figure>
+
+<h6 id="9-将completedDataStream中数据流分别输出"><a href="#9-将completedDataStream中数据流分别输出" class="headerlink" title="9.将completedDataStream中数据流分别输出"></a>9.将completedDataStream中数据流分别输出</h6><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//正常支付</span></span><br><span class="line">completedDataStream.print();</span><br><span class="line"><span class="comment">//超时支付</span></span><br><span class="line">DataStream&lt;OrderResult&gt; sideOutput = ((SingleOutputStreamOperator&lt;OrderResult&gt;) completedDataStream).getSideOutput(orderTimeoutOutput);sideOutput.print();</span><br><span class="line">env.execute(<span class="string">"order timeout job"</span>);</span><br></pre></td></tr></table></figure>
+
+<p>完整的代码链接</p>
+<p><a href="https://github.com/comsir/Flink-UserBehaviorAnalysis/tree/master/OrderTimeoutDetect" target="_blank" rel="noopener">https://github.com/comsir/Flink-UserBehaviorAnalysis/tree/master/OrderTimeoutDetect</a></p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Flink/" rel="tag"># Flink</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2019/12/17/contos7%E5%8D%95%E6%9C%BA%E5%AE%89%E8%A3%85hdfs/" rel="prev" title="contos7单机安装hdfs">
+      <i class="fa fa-chevron-left"></i> contos7单机安装hdfs
+    </a></div>
+      <div class="post-nav-item"></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+  </div>
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let activeClass = CONFIG.comments.activeClass;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#一、背景"><span class="nav-number">1.</span> <span class="nav-text">一、背景</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#二、基本需求"><span class="nav-number">2.</span> <span class="nav-text">二、基本需求</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#三、解决思路"><span class="nav-number">3.</span> <span class="nav-text">三、解决思路</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#四、具体实验步骤"><span class="nav-number">4.</span> <span class="nav-text">四、具体实验步骤</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#1-创建maven工程"><span class="nav-number">4.0.1.</span> <span class="nav-text">1.创建maven工程</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#2-配置pom文件"><span class="nav-number">4.0.2.</span> <span class="nav-text">2.配置pom文件</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#3-定义POJO"><span class="nav-number">4.0.3.</span> <span class="nav-text">3.定义POJO</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#4-创建主类OrderTimeout"><span class="nav-number">4.0.4.</span> <span class="nav-text">4.创建主类OrderTimeout</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#5-定义Pattern-匹配模式"><span class="nav-number">4.0.5.</span> <span class="nav-text">5.定义Pattern 匹配模式</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#6-定义标签"><span class="nav-number">4.0.6.</span> <span class="nav-text">6.定义标签</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#7-数据流绑定pattern"><span class="nav-number">4.0.7.</span> <span class="nav-text">7.数据流绑定pattern</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#8-获取匹配到的数据流"><span class="nav-number">4.0.8.</span> <span class="nav-text">8.获取匹配到的数据流</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#9-将completedDataStream中数据流分别输出"><span class="nav-number">4.0.9.</span> <span class="nav-text">9.将completedDataStream中数据流分别输出</span></a></li></ol></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="lingcheng"
+      src="/images/touxiang.jpg">
+  <p class="site-author-name" itemprop="name">lingcheng</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">3</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">2</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">2</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">lingcheng</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v4.1.1
+  </div>
+  <span class="post-meta-divider">|</span>
+  <div class="theme-info">主题 – <a href="https://mist.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Mist</a> v7.6.0
+  </div>
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>
