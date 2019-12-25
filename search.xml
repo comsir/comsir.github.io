@@ -1,0 +1,198 @@
+<?xml version="1.0" encoding="utf-8"?>
+<search>
+  <entry>
+    <title>how to be a Apache Contributor</title>
+    <url>/2019/12/25/how-to-be-a-Apache-Contributor/</url>
+    <content><![CDATA[<p>很好的文章 <a href="https://mp.weixin.qq.com/s/A_OQkpnUSuBaBCYezGFzFw" target="_blank" rel="noopener">原文链接</a></p>
+<p>以Apache Hudi为例，讲解如何通过一行代码成为Apache顶级项目的Contributor。</p>
+<a id="more"></a>
+
+<h3 id="1-准备"><a href="#1-准备" class="headerlink" title="1. 准备"></a>1. 准备</h3><h4 id="1-1-Github准备"><a href="#1-1-Github准备" class="headerlink" title="1.1 Github准备"></a>1.1 Github准备</h4><p>1) 准备 <code>github</code>账号，通过<a href="https://github.com/join注册，记住注册的邮箱和用户名。" target="_blank" rel="noopener">https://github.com/join注册，记住注册的邮箱和用户名。</a></p>
+<p>2) Fork Apache Hudi项目(<a href="https://github.com/apache/incubator-hudi)至自己(TheApacheHudi)的远程仓库" target="_blank" rel="noopener">https://github.com/apache/incubator-hudi)至自己(TheApacheHudi)的远程仓库</a></p>
+<p>3) 将资源远程仓库clone至本地</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> git <span class="built_in">clone</span> https://github.com/comsir/incubator-hudi.git</span></span><br><span class="line">Cloning into 'incubator-hudi'...</span><br><span class="line">remote: Enumerating objects: 1, done.</span><br><span class="line">remote: Counting objects: 100% (1/1), done.</span><br><span class="line">remote: Total 24234 (delta 0), reused 0 (delta 0), pack-reused 24233</span><br><span class="line">Receiving objects: 100% (24234/24234), 9.79 MiB | 397.00 KiB/s, done.</span><br><span class="line">Resolving deltas: 100% (11736/11736), done.</span><br></pre></td></tr></table></figure>
+
+<p>4) 进入到incubator-hudi目录后添加Apache Hudi为<strong>upstream</strong></p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> git remote add upstream https://github.com/comsir/incubator-hudi.git</span></span><br></pre></td></tr></table></figure>
+
+<p>5) 使用 <code>git remote-v</code>查看项目状态，如下表示自己（TheApacheHudi）远程仓库为<strong>origin</strong>，而Apache远程仓库为<strong>upstream</strong></p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> git remote -v</span></span><br><span class="line">origin  https://github.com/comsir/incubator-hudi.git (fetch)</span><br><span class="line">origin  https://github.com/comsir/incubator-hudi.git (push)</span><br><span class="line">upstream        https://github.com/comsir/incubator-hudi.git (fetch)</span><br><span class="line">upstream        https://github.com/comsir/incubator-hudi.git (push)</span><br></pre></td></tr></table></figure>
+
+<p>6) 使用 <code>git config user.name xxx;git config user.email xxx</code>配置用户名和邮箱，注意用户名和邮箱需要使用注册Github使用的用户名和邮箱，这样后续才能正常显示 <code>Contributor</code>标志(如果以前已经配置过 可跳过)</p>
+<p>这样之后就可以自己修改代码了！</p>
+<h4 id="1-2-邮箱订阅"><a href="#1-2-邮箱订阅" class="headerlink" title="1.2 邮箱订阅"></a>1.2 邮箱订阅</h4><p>为方便参与社区讨论，请务必订阅<a href="mailto:dev@hudi.apache.org">dev@hudi.apache.org</a>开发者邮件列表，订阅方法很简单，只需向<a href="mailto:dev-subscribe@hudi.apache.org">dev-subscribe@hudi.apache.org</a>发送一封空邮件，然后马上会收到<a href="mailto:dev-help@hudi.apache.org">dev-help@hudi.apache.org</a>回复的一封邮件，然后对该邮件再点击最下方的回复按钮（以Google邮箱为例）进行一次回复即可（如回复comfirm）</p>
+<p>回复完之后会收到一封正式的欢迎邮件，表示已经订阅完成，后续便可参与社区的讨论</p>
+<h4 id="1-3-JIRA准备"><a href="#1-3-JIRA准备" class="headerlink" title="1.3 JIRA准备"></a>1.3 JIRA准备</h4><p>几乎所有Apache顶级项目都是通过JIRA来管理issue，所以注册JIRA账号必不可少。</p>
+<p>1) 准备jira账号，通过<a href="https://issues.apache.org/jira/secure/Signup!default.jspa注册，请记住JIRA" target="_blank" rel="noopener">https://issues.apache.org/jira/secure/Signup!default.jspa注册，请记住JIRA</a> ID，已有账号可直接登录。</p>
+<p>2) 查看HUDI所有issue（<a href="https://issues.apache.org/jira/projects/HUDI/issues）。" target="_blank" rel="noopener">https://issues.apache.org/jira/projects/HUDI/issues）。</a></p>
+<p>3) 若有合适的issue，可点击右侧的Assign to me(分配给我)，对于较为复杂的issue，可在issue下评论讨论实现思路，确保达成一致后再开始写代码。</p>
+<p>4) 若登录后发现无 <code>Assignto me（分配给我）</code>按钮，那么需要向<a href="mailto:dev@hudi.apache.org">dev@hudi.apache.org</a>邮箱发送一封JIRA权限开通申请邮件，可参照如下模版发送。</p>
+<p><em>Hi,</em></p>
+<p><em>I want to contribute to Apache Hudi. Would you please give me the contributor permission? My JIRA ID is xxx.</em></p>
+<p>当项目PMC看到邮件后，会给你开通相应权限（由于时差原因，回复可能有些延迟）。</p>
+<h4 id="1-4-Confluence准备"><a href="#1-4-Confluence准备" class="headerlink" title="1.4 Confluence准备"></a>1.4 Confluence准备</h4><p>同样，Apache顶级项目会通过Confluence来管理一些改进计划，如Hudi的RFC，当你想要对Hudi添加一些大的特性时，需要在Confluence创建RFC（<a href="https://cwiki.apache.org/confluence/display/HUDI/Apache+Hudi），若无权限，也需要向dev@hudi.apache.org邮箱发送一封申请邮件，与申请JIRA权限类似，带上自己的Confluence" target="_blank" rel="noopener">https://cwiki.apache.org/confluence/display/HUDI/Apache+Hudi），若无权限，也需要向dev@hudi.apache.org邮箱发送一封申请邮件，与申请JIRA权限类似，带上自己的Confluence</a> ID，会有PMC给你开通权限。几乎所有问题都可向<a href="mailto:dev@hudi.apache.org">dev@hudi.apache.org</a>邮箱求助。</p>
+<h3 id="2-提交代码"><a href="#2-提交代码" class="headerlink" title="2. 提交代码"></a>2. 提交代码</h3><p>对于一些初次参与社区的开发者而言，一种较好的上手方式就是 <code>fix typo</code>，即修复单词错误，比如，如下的单词错误</p>
+<p>1) 基于master分支checkout一个新分支</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> git checkout -b typofix</span></span><br><span class="line">Switched to a new branch 'typofix'</span><br><span class="line">M       hudi-common/src/main/java/org/apache/hudi/common/util/RocksDBDAO.java</span><br></pre></td></tr></table></figure>
+
+<p>2) 使用 <code>git add.</code>， <code>git commit-m&quot;[MINOR] fix typo&quot;</code>， <code>git push origin typofix:typofix</code>推至自己远端仓库</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> git add .</span></span><br><span class="line"></span><br><span class="line"><span class="meta">$</span><span class="bash"> git commit -m <span class="string">"[MINOR] fix typo"</span></span></span><br><span class="line">[typofix 1bfd61ca] [MINOR] fix typo</span><br><span class="line"> 1 file changed, 1 insertion(+), 1 deletion(-)</span><br><span class="line"></span><br><span class="line"><span class="meta">$</span><span class="bash"> git push origin typofix:typofix</span></span><br><span class="line">Enumerating objects: 23, done.</span><br><span class="line">Counting objects: 100% (23/23), done.</span><br><span class="line">Delta compression using up to 8 threads</span><br><span class="line">Compressing objects: 100% (9/9), done.</span><br><span class="line">Writing objects: 100% (12/12), 836 bytes | 418.00 KiB/s, done.</span><br><span class="line">Total 12 (delta 5), reused 0 (delta 0)</span><br><span class="line">remote: Resolving deltas: 100% (5/5), completed with 5 local objects.</span><br><span class="line">remote:</span><br><span class="line">remote: Create a pull request for 'typofix' on GitHub by visiting:</span><br><span class="line">remote:      https://github.com/comsir/incubator-hudi/pull/new/typofix</span><br><span class="line">remote:</span><br><span class="line">To https://github.com/comsir/incubator-hudi.git</span><br><span class="line"> * [new branch]        typofix -&gt; typofix</span><br></pre></td></tr></table></figure>
+
+
+
+<p>3) 进入Apache/Hudi github页面，会出现 <code>Compare&amp;pull request</code>按钮</p>
+<p>4) 点击 <code>Compare&amp;pull request</code>，补充PR描述信息后，点击 <code>Createpull request</code>即可</p>
+<p><img src="C:%5CUsers%5C15732%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5Cimage-20191225114230586.png" alt="image-20191225114230586"></p>
+<p>5) 这样便完成提交PR的过程，后续等待committer帮忙review代码、根据意见修改代码和合并PR，当合并后，恭喜你，正式成为Apache顶级项目的contributor</p>
+<p><img src="C:%5CUsers%5C15732%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5Cimage-20191225114745499.png" alt="image-20191225114745499"></p>
+<p>当然上述 <code>typo fix</code>可用作熟悉整体流程，一旦熟悉后，可尝试进行一些bug fix或开发新的feature、回答邮件列表问题、参与邮件列表讨论等，都会有助于更快速成为committer。</p>
+<p>对于Apache Hudi项目，现在还有些非常简单的任务可供新手上手，如<a href="https://issues.apache.org/jira/browse/HUDI-233（使用SLF4J重做项目日志）；https://issues.apache.org/jira/browse/HUDI-385（scala" target="_blank" rel="noopener">https://issues.apache.org/jira/browse/HUDI-233（使用SLF4J重做项目日志）；https://issues.apache.org/jira/browse/HUDI-385（scala</a> checkstyle处理），欢迎想要参与社区的开发者认领issue，成为Apache的contributor。</p>
+<p><strong>其他Apache顶级项目（如Flink/Spark/HBase）的社区参与与上述步骤类似。</strong></p>
+<h3 id="2-总结"><a href="#2-总结" class="headerlink" title="2. 总结"></a>2. 总结</h3><p>想成为Apache的contributor或熟悉PR提交流程，一种简单参考样例是通过 <code>typo fix</code>上手，熟悉流程后可做更多事情，这样可早日成为Apache committer。</p>
+]]></content>
+      <tags>
+        <tag>apache Hudi</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>DDoS攻击介绍（一） 原理</title>
+    <url>/2019/12/20/DDoS%E6%94%BB%E5%87%BB%E4%BB%8B%E7%BB%8D%EF%BC%88%E4%B8%80%EF%BC%89-%E5%8E%9F%E7%90%86/</url>
+    <content><![CDATA[<h2 id="一、DoS介绍"><a href="#一、DoS介绍" class="headerlink" title="一、DoS介绍"></a>一、DoS介绍</h2><p>DoS全称为拒绝服务 。是一种实现简单又很有效的针对服务器进行的攻击方式，其目的就是让被攻击的主机和服务器拒绝正常用户的访问，造成服务器的瘫痪。</p>
+<a id="more"></a>
+
+<p>攻击的基本流程为：</p>
+<p>1.攻击者向目标服务器发出大量的虚假IP地址服务请求</p>
+<p>2.被攻击者在接受到请求之后，返回确认信息并等待攻击者的确认（TCP三次握手）</p>
+<p>3.由于攻击者发送的信息都是虚假的，所以被攻击服务器无法接受到确认信息从而一直处于等待状态</p>
+<p>而服务器分配给这次请求的资源却被一直占用无法被释放。</p>
+<p>4.当被攻击者等待回复超时时，链接会中断，这是攻击者再次发送新的虚假服务请求。</p>
+<p>5.就这样，服务器资源不断地被占用，直到瘫痪。</p>
+<h2 id="二、DDoS介绍"><a href="#二、DDoS介绍" class="headerlink" title="二、DDoS介绍"></a>二、DDoS介绍</h2><p>DDoS全程为分布式拒绝服务，是在DoS基础之上进行的更大规模，更大范围的攻击方式。</p>
+<p>Dos只是单机与单机之间的攻击模式 ，而DDoS是利用一批受控制的僵尸主机向目标服务器或者网络发起攻击，其攻击的强度和带来的危险都比DoS大的多。</p>
+<p>DDoS的攻击过程如下图所示：</p>
+<p><img src="C:%5CUsers%5C15732%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5Cimage-20191220211529981.png" alt="image-20191220211529981"></p>
+<p>​        首先，DDoS攻击者控制一批傀儡机，即在网络上发现系统具有相关漏洞的主机，然后进行人侵、安装控制程序，入侵的越多，控制的傀儡机就越多，攻击源就更多。然后把被控制的僵尸主机进行分配，一部分充当攻击的主要控制端，一部分充当攻击源。控制端只负责发送攻击者的控制命令而不参与实际的发包攻击，而傀儡机只负责向目标发送DDoS攻击数据包。整个僵尸网络，在攻击者统一的指挥下，对被攻击的服务器发起攻击，致使目标网络或者服务器瘫痪。</p>
+<p>​        由于这种攻击模式下，攻击者深藏在幕后，而且控制器和傀儡机间的通信，和正常的主机间的通信没有区别，因此攻击者很难被监控系统跟踪，DDoS攻击者的隐蔽性极强，这也对DDoS的反向追踪带来了很大的难度。<br>DDoS攻击能够成为黑客的“宠儿”，主要由于以下几个原因：</p>
+<p>１、成本低：在日常，很多网络用户的操作系统并不会及时更新系统，修补漏洞。这样造成了黑客可以通过极为廉价的成本就可以在网络上获得大量的僵尸主机，从而构建大规模的僵尸网络。<br>２、规模大：如今社会生活的方方面面都在数字化，网络终端数目极为庞大，黑客可控的僵尸网络种类越来越多，规模越来越大。<br>３、隐蔽性强：如上面所讲，僵尸网络给攻击者提供了强大的掩护，给DDoS攻击的反向追踪带来了极大的难度。<br>４、攻击方式多样：DDoS有着繁多的攻击模式，变种多，相应的防御难度大。<br>５、门槛低，利益大：由于背后黑色产业链的日趋成熟，大量攻击道具的出现，极度降低了成为DDoS攻击者的门槛，同时背后利益链条的庞大，也是主要推动DDoS攻击频发的因素。</p>
+]]></content>
+  </entry>
+  <entry>
+    <title>Flink实战（一）：订单支付实时监控</title>
+    <url>/2019/12/17/Flink%E5%AE%9E%E6%88%98%EF%BC%88%E4%B8%80%EF%BC%89%EF%BC%9A%E8%AE%A2%E5%8D%95%E6%94%AF%E4%BB%98%E5%AE%9E%E6%97%B6%E7%9B%91%E6%8E%A7/</url>
+    <content><![CDATA[<h4 id="一、背景"><a href="#一、背景" class="headerlink" title="一、背景"></a>一、背景</h4><p>​        在电商平台中，最终创造收入和利润的是用户下单购买的环节；更具体一点，是用户真正完成支付动作的时候。用户下单的行为可以表明用户对商品的需求，但在现实中，并不是每次下单都会被用户立刻支付。当拖延一段时间后，用户支付的意愿会降低。所以为了让用户更有紧迫感从而提高支付转化率，同时也为了防范订单支付环节的安全风险，电商网站往往会对订单状态进行监控，设置一个失效时间（比如15分钟），如果下单后一段时间仍未支付，订单就会被取消。</p>
+<p>​        本文将使用<strong>FlinkCEP</strong>库来实现这个功能。</p>
+<a id="more"></a>
+
+<h4 id="二、基本需求"><a href="#二、基本需求" class="headerlink" title="二、基本需求"></a>二、基本需求</h4><p>​    1.用户下单之后，应设置订单失效时间，以提高用户支付的意愿，并降低系统风险</p>
+<p>​    2.用户下单后15分钟未支付，则输出监控信息</p>
+<h4 id="三、解决思路"><a href="#三、解决思路" class="headerlink" title="三、解决思路"></a>三、解决思路</h4><p>​    利用 CEP 库进行事件流的模式匹配，并设定匹配的时间间隔。</p>
+<h4 id="四、具体实验步骤"><a href="#四、具体实验步骤" class="headerlink" title="四、具体实验步骤"></a>四、具体实验步骤</h4><p>我们简化数据为：用户ID（orderId Long），事件类型（eventType String）,事件时间（eventTime Long）。</p>
+<p>其中时间类型包括：create 和 pay</p>
+<p>我们先将事件流按照订单号orderId分流，然后定义这样的一个事件模式：在15分钟内，事件“create”与“pay”非严格连续</p>
+<h6 id="1-创建maven工程"><a href="#1-创建maven工程" class="headerlink" title="1.创建maven工程"></a>1.创建maven工程</h6><p>​    可以叫做OrderTimeoutDetect。</p>
+<h6 id="2-配置pom文件"><a href="#2-配置pom文件" class="headerlink" title="2.配置pom文件"></a>2.配置pom文件</h6><p>因为需要使用CEP库 所以要引入相关依赖 </p>
+<figure class="highlight"><table><tr><td class="code"><pre><span class="line">&lt;dependency&gt;</span><br><span class="line">          &lt;groupId&gt;org.apache.flink&lt;/groupId&gt;</span><br><span class="line">          &lt;artifactId&gt;flink-cep_2.11&lt;/artifactId&gt;</span><br><span class="line">          &lt;version&gt;1.9.1&lt;/version&gt;</span><br><span class="line">      &lt;/dependency&gt;</span><br></pre></td></tr></table></figure>
+
+<p>其他还有Flink通用的依赖</p>
+<figure class="highlight"><table><tr><td class="code"><pre><span class="line">&lt;dependency&gt;</span><br><span class="line">          &lt;groupId&gt;org.apache.flink&lt;/groupId&gt;</span><br><span class="line">          &lt;artifactId&gt;flink-java&lt;/artifactId&gt;</span><br><span class="line">          &lt;version&gt;1.9.1&lt;/version&gt;</span><br><span class="line">      &lt;/dependency&gt;</span><br><span class="line">      &lt;dependency&gt;</span><br><span class="line">          &lt;groupId&gt;org.apache.flink&lt;/groupId&gt;</span><br><span class="line">          &lt;artifactId&gt;flink-streaming-java_2.11&lt;/artifactId&gt;</span><br><span class="line">          &lt;version&gt;1.9.1&lt;/version&gt;</span><br><span class="line">      &lt;/dependency&gt;</span><br></pre></td></tr></table></figure>
+
+<p>编译打包方式官方推荐用maven-shade-plugin。<a href="https://github.com/comsir/Flink-UserBehaviorAnalysis/blob/master/pom.xml" target="_blank" rel="noopener">完整pom链接</a></p>
+<h6 id="3-定义POJO"><a href="#3-定义POJO" class="headerlink" title="3.定义POJO"></a>3.定义POJO</h6><p>定义OrderEvent <a href="https://github.com/comsir/Flink-UserBehaviorAnalysis/blob/master/OrderTimeoutDetect/src/main/java/OrderEvent.java" target="_blank" rel="noopener">完整类</a>输入的订单事件流；另外定义OrderResult <a href="https://github.com/comsir/Flink-UserBehaviorAnalysis/blob/master/OrderTimeoutDetect/src/main/java/OrderResult.java" target="_blank" rel="noopener">完整类</a>为输出显示的订单状态结果。</p>
+<h6 id="4-创建主类OrderTimeout"><a href="#4-创建主类OrderTimeout" class="headerlink" title="4.创建主类OrderTimeout"></a>4.创建主类OrderTimeout</h6><p>先创建流作业的环境已经简单的配置 使用的是事件时间</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();</span><br><span class="line">env.setStreamTimeCharacteristic(TimeCharacteristic.EventTime);</span><br><span class="line">env.setParallelism(<span class="number">1</span>);</span><br></pre></td></tr></table></figure>
+
+<p>测试用的自定义数据</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">DataStream&lt;OrderEvent&gt; dataSource = env.fromCollection(Arrays.asList(</span><br><span class="line">                <span class="keyword">new</span> OrderEvent(<span class="number">1L</span>, <span class="string">"create"</span>, <span class="number">1558430842L</span>),</span><br><span class="line">                <span class="keyword">new</span> OrderEvent(<span class="number">2L</span>, <span class="string">"create"</span>, <span class="number">1558430843L</span>),</span><br><span class="line">                <span class="keyword">new</span> OrderEvent(<span class="number">2L</span>, <span class="string">"pay"</span>, <span class="number">1558430844L</span>)</span><br><span class="line">        ))</span><br></pre></td></tr></table></figure>
+
+<p>有了数据源之后，我们需要对数据流按照orderId做keyby分流</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">KeyedStream&lt;OrderEvent, Long&gt; orderEventStream = dataSource.assignTimzestampsAndWatermarks(<span class="keyword">new</span> AscendingTimestampExtractor&lt;OrderEvent&gt;() &#123;</span><br><span class="line">            <span class="meta">@Override</span></span><br><span class="line">            <span class="function"><span class="keyword">public</span> <span class="keyword">long</span> <span class="title">extractAscendingTimestamp</span><span class="params">(OrderEvent element)</span> </span>&#123;</span><br><span class="line">                <span class="keyword">return</span> element.getEventTime() * <span class="number">1000</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;)</span><br><span class="line">                .keyBy(<span class="keyword">new</span> KeySelector&lt;OrderEvent, Long&gt;() &#123;</span><br><span class="line">                    <span class="meta">@Override</span></span><br><span class="line">                    <span class="function"><span class="keyword">public</span> Long <span class="title">getKey</span><span class="params">(OrderEvent value)</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">                        <span class="keyword">return</span> value.getOrderId();</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;);</span><br></pre></td></tr></table></figure>
+
+<p>在做keyBy之前日常加上waterMark。因为我们这里的时间的顺序的 所以用assignTimzestampsAndWatermarks就行，生产中很少用。</p>
+<p>这样就得到了一个KeyedStream，留着备用。</p>
+<h6 id="5-定义Pattern-匹配模式"><a href="#5-定义Pattern-匹配模式" class="headerlink" title="5.定义Pattern 匹配模式"></a>5.定义Pattern 匹配模式</h6><figure class="highlight java"><table><tr><td class="code"><pre><span class="line">Pattern&lt;OrderEvent, OrderEvent&gt; OrderPayPattern = Pattern.&lt;OrderEvent&gt;begin(<span class="string">"begin"</span>).where(<span class="keyword">new</span> SimpleCondition&lt;OrderEvent&gt;() &#123;</span><br><span class="line">            <span class="meta">@Override</span></span><br><span class="line">            <span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">filter</span><span class="params">(OrderEvent value)</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">                <span class="keyword">return</span> value.getEventType().equals(<span class="string">"create"</span>);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;)</span><br><span class="line">        <span class="comment">//非严格连续 </span></span><br><span class="line">        .followedBy(<span class="string">"follow"</span>).where(<span class="keyword">new</span> SimpleCondition&lt;OrderEvent&gt;() &#123;</span><br><span class="line">            <span class="meta">@Override</span></span><br><span class="line">            <span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">filter</span><span class="params">(OrderEvent value)</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">                <span class="keyword">return</span> value.getEventType().equals(<span class="string">"pay"</span>);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;)</span><br><span class="line">    <span class="comment">//设定超时时间</span></span><br><span class="line">    .within(Time.seconds(<span class="number">15</span>));</span><br></pre></td></tr></table></figure>
+
+<h6 id="6-定义标签"><a href="#6-定义标签" class="headerlink" title="6.定义标签"></a>6.定义标签</h6><p>定义超时支付的输出标签，用标签sideOutput</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">OutputTag&lt;OrderResult&gt; orderTimeoutOutput = <span class="keyword">new</span> OutputTag&lt;OrderResult&gt;(<span class="string">"orderTimeout"</span>)&#123;&#125;;</span><br></pre></td></tr></table></figure>
+
+<p><strong>特别注意：不是简单的new 一个类，是一个匿名内部类</strong></p>
+<h6 id="7-数据流绑定pattern"><a href="#7-数据流绑定pattern" class="headerlink" title="7.数据流绑定pattern"></a>7.数据流绑定pattern</h6><p>将keyBy后的流绑定模式 keyedStream转换成patternStream</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">PatternStream&lt;OrderEvent&gt; patternStream = CEP.pattern(orderEventStream, OrderPayPattern);</span><br></pre></td></tr></table></figure>
+
+<h6 id="8-获取匹配到的数据流"><a href="#8-获取匹配到的数据流" class="headerlink" title="8.获取匹配到的数据流"></a>8.获取匹配到的数据流</h6><p>从patternStream中获取匹配的流（包括超时的和正常的  等等要分别处理）</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">DataStream&lt;OrderResult&gt; completedDataStream = patternStream.select(</span><br><span class="line">   <span class="comment">//第一个参数 刚定义的超时输出的标签 </span></span><br><span class="line">   orderTimeoutOutput, </span><br><span class="line">   <span class="comment">//第二个参数 处理超时的流</span></span><br><span class="line">   <span class="keyword">new</span> PatternTimeoutFunction&lt;OrderEvent, OrderResult&gt;() &#123;</span><br><span class="line">                <span class="meta">@Override</span></span><br><span class="line">                <span class="function"><span class="keyword">public</span> OrderResult <span class="title">timeout</span><span class="params">(Map&lt;String, List&lt;OrderEvent&gt;&gt; pattern, <span class="keyword">long</span> timeoutTimestamp)</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">                    Long timeoutOrderId = pattern.getOrDefault(<span class="string">"begin"</span>, <span class="keyword">null</span>).iterator().next().getOrderId();</span><br><span class="line">                    <span class="keyword">return</span> <span class="keyword">new</span> OrderResult(timeoutOrderId, <span class="string">"timeout"</span>);</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;,</span><br><span class="line">     <span class="comment">//第三个参数 处理正常的流</span></span><br><span class="line">     <span class="keyword">new</span> PatternSelectFunction&lt;OrderEvent, OrderResult&gt;() &#123;</span><br><span class="line">                <span class="meta">@Override</span></span><br><span class="line">                <span class="function"><span class="keyword">public</span> OrderResult <span class="title">select</span><span class="params">(Map&lt;String, List&lt;OrderEvent&gt;&gt; pattern)</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">                    Long payOrderId = pattern.getOrDefault(<span class="string">"follow"</span>, <span class="keyword">null</span>).iterator().next().getOrderId();</span><br><span class="line">                    <span class="keyword">return</span> <span class="keyword">new</span> OrderResult(payOrderId, <span class="string">"success"</span>);</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;);</span><br></pre></td></tr></table></figure>
+
+<h6 id="9-将completedDataStream中数据流分别输出"><a href="#9-将completedDataStream中数据流分别输出" class="headerlink" title="9.将completedDataStream中数据流分别输出"></a>9.将completedDataStream中数据流分别输出</h6><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">//正常支付</span></span><br><span class="line">completedDataStream.print();</span><br><span class="line"><span class="comment">//超时支付</span></span><br><span class="line">DataStream&lt;OrderResult&gt; sideOutput = ((SingleOutputStreamOperator&lt;OrderResult&gt;) completedDataStream).getSideOutput(orderTimeoutOutput);sideOutput.print();</span><br><span class="line">env.execute(<span class="string">"order timeout job"</span>);</span><br></pre></td></tr></table></figure>
+
+<p>完整的代码链接</p>
+<p><a href="https://github.com/comsir/Flink-UserBehaviorAnalysis/tree/master/OrderTimeoutDetect" target="_blank" rel="noopener">https://github.com/comsir/Flink-UserBehaviorAnalysis/tree/master/OrderTimeoutDetect</a></p>
+]]></content>
+      <categories>
+        <category>Flink</category>
+      </categories>
+      <tags>
+        <tag>Flink</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>contos7单机安装hdfs</title>
+    <url>/2019/12/17/contos7%E5%8D%95%E6%9C%BA%E5%AE%89%E8%A3%85hdfs/</url>
+    <content><![CDATA[<p>背景：本文介绍在centos7中安装单机版的hdfs,供学习测试hdfs用。</p>
+<a id="more"></a>
+<ol>
+<li>VMware15 </li>
+<li>centos7</li>
+<li>在非root目录下操作</li>
+<li>jdk1.8.0_231</li>
+<li>hadoop-3.1.3</li>
+</ol>
+<p><strong>一、配置JDK环境</strong></p>
+<p>参考上一篇文章 <a href="https://blog.csdn.net/qq_31963719/article/details/103305446" target="_blank" rel="noopener">文章链接</a></p>
+<p><strong>二、配置免密登入</strong></p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">ssh-keygen -t rsa</span><br><span class="line">cd ~&#x2F;.ssh</span><br><span class="line">cat id_rsa.pub&gt;&gt;authorized_keys</span><br><span class="line">#如果不能绵密登录，执行以下命令</span><br><span class="line">chmod 710 authorized_keys</span><br></pre></td></tr></table></figure>
+<p>测试是否配置成功</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">[song@master ~]$ ssh localhost</span><br><span class="line">Last login: Fri Nov 29 10:04:31 2019 from 192.168.91.1</span><br></pre></td></tr></table></figure>
+<p>如上情况 说明配置成功</p>
+<p><strong>三、下载hadoop</strong><br>官网下载比较慢 推荐几个国内的镜像网站：(开源软件的镜像基本都有)</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">http:&#x2F;&#x2F;mirror.bit.edu.cn&#x2F;apache&#x2F;hadoop&#x2F;common&#x2F;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">http:&#x2F;&#x2F;mirrors.hust.edu.cn&#x2F;apache&#x2F;hadoop&#x2F;common</span><br></pre></td></tr></table></figure>
+<p>用的版本是<strong>hadoop-3.1.3.tar.gz</strong><br>用 liunx 命令 <strong>rz</strong> 上传到自己的目录/home/song/soft</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">[song@master soft]$ ll</span><br><span class="line">drwxr-xr-x. 10 song song       161 Nov 28 13:34 hadoop-3.1.3</span><br><span class="line">-rw-r--r--.  1 song song 338075860 Nov 27 22:21 hadoop-3.1.3.tar.gz</span><br></pre></td></tr></table></figure>
+<p>解压：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">tar -zxvf hadoop-3.1.3.tar.gz</span><br></pre></td></tr></table></figure>
+<p><strong>四、配置文件</strong><br>1.配置hadoop-env.sh</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">cd hadoop-3.1.3</span><br><span class="line">vim etc&#x2F;hadoop&#x2F;hadoop-env.sh</span><br></pre></td></tr></table></figure>
+<p>添加JDK路径</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">export JAVA_HOME&#x3D;&#x2F;home&#x2F;song&#x2F;soft&#x2F;jdk1.8.0_231</span><br></pre></td></tr></table></figure>
+<p>2.配置core-site.xml</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">cd hadoop-3.1.3</span><br><span class="line">vim etc&#x2F;hadoop&#x2F;core-site.xml</span><br></pre></td></tr></table></figure>
+<p>在&lt;configuration 中配置property</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&lt;!-- 指定HDFS的（namenode）的通信地址 --&gt;</span><br><span class="line">&lt;property&gt;</span><br><span class="line">    &lt;name&gt;fs.defaultFS&lt;&#x2F;name&gt;</span><br><span class="line">    &lt;value&gt;hdfs:&#x2F;&#x2F;master(自己的hostname):9000&lt;&#x2F;value&gt;</span><br><span class="line">&lt;&#x2F;property&gt;</span><br><span class="line">&lt;!-- 指定hadoop运行时产生文件的存储路径 --&gt;</span><br><span class="line">&lt;property&gt;</span><br><span class="line">    &lt;name&gt;hadoop.tmp.dir&lt;&#x2F;name&gt;</span><br><span class="line">    &lt;value&gt;&#x2F;home&#x2F;song&#x2F;tmp&#x2F;hadoop&#x2F;tmp(自己的路径)&lt;&#x2F;value&gt;</span><br><span class="line">&lt;&#x2F;property&gt;</span><br></pre></td></tr></table></figure>
+<p>3.配置 hdfs-site.xml</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">cd hadoop-3.1.3</span><br><span class="line">vim etc&#x2F;hadoop&#x2F;hdfs-site.xml</span><br></pre></td></tr></table></figure>
+<p>在&lt;configuration 中配置property</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">  &lt;property&gt;</span><br><span class="line">      &lt;name&gt;dfs.name.dir&lt;&#x2F;name&gt;</span><br><span class="line">      &lt;value&gt;&#x2F;home&#x2F;song&#x2F;tmp&#x2F;hadoop&#x2F;hdfs&#x2F;name&lt;&#x2F;value&gt;</span><br><span class="line">  &lt;&#x2F;property&gt;</span><br><span class="line">  &lt;property&gt;</span><br><span class="line">      &lt;name&gt;dfs.data.dir&lt;&#x2F;name&gt;</span><br><span class="line">      &lt;value&gt;&#x2F;home&#x2F;song&#x2F;tmp&#x2F;hadoop&#x2F;hdfs&#x2F;data&lt;&#x2F;value&gt;</span><br><span class="line">  &lt;&#x2F;property&gt;</span><br><span class="line">  &lt;!-- 设置hdfs副本数量 --&gt;</span><br><span class="line">  &lt;property&gt;</span><br><span class="line">      &lt;name&gt;dfs.replication&lt;&#x2F;name&gt;</span><br><span class="line">      &lt;value&gt;1&lt;&#x2F;value&gt;</span><br><span class="line">  &lt;&#x2F;property&gt;</span><br><span class="line">&lt;!--hdfs的访问权限设置为false--&gt;</span><br><span class="line">  &lt;property&gt;</span><br><span class="line">         &lt;name&gt;dfs.permissions&lt;&#x2F;name&gt;</span><br><span class="line">         &lt;value&gt;false&lt;&#x2F;value&gt;</span><br><span class="line">  &lt;&#x2F;property&gt;</span><br><span class="line">  &lt;!--web界面访问--&gt;</span><br><span class="line">  &lt;property&gt;</span><br><span class="line">         &lt;name&gt;dfs.http.address&lt;&#x2F;name&gt;</span><br><span class="line">         &lt;value&gt;192.168.91.101(自己的主机IP):50070&lt;&#x2F;value&gt;</span><br><span class="line">  &lt;&#x2F;property&gt;</span><br><span class="line">  &lt;!--开启webhdfs--&gt;</span><br><span class="line">  &lt;property&gt;</span><br><span class="line">        &lt;name&gt;dfs.webhdfs.enabled&lt;&#x2F;name&gt;</span><br><span class="line">        &lt;value&gt;true&lt;&#x2F;value&gt;</span><br><span class="line">  &lt;&#x2F;property&gt;</span><br></pre></td></tr></table></figure>
+<p><strong>五、启动hdfs</strong><br>第一次启动需要格式化namenode</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">hdfs namenode -format</span><br></pre></td></tr></table></figure>
+<p>格式化完 启动hdfs</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">cd hadoop-3.1.3</span><br><span class="line">.&#x2F;sbin&#x2F;start-dfs.sh</span><br></pre></td></tr></table></figure>
+<p>启动成功（我的主机名叫master）</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">Starting namenodes on [master]</span><br><span class="line">Starting datanodes</span><br><span class="line">Starting secondary namenodes [master]</span><br></pre></td></tr></table></figure>
+<p>jps查看启动的进程</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">3892 NameNode</span><br><span class="line">4038 DataNode</span><br><span class="line">4221 SecondaryNameNode</span><br></pre></td></tr></table></figure>
+<p>最后就是在浏览器中测试</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">http:&#x2F;&#x2F;192.168.91.101(自己机器的IP):50070&#x2F;</span><br></pre></td></tr></table></figure>]]></content>
+      <categories>
+        <category>HDFS</category>
+      </categories>
+      <tags>
+        <tag>hdfs</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Say hello to the world</title>
+    <url>/2019/12/17/Say-hello-to-the-world/</url>
+    <content><![CDATA[<p>博学之，审问之，慎思之</p>
+]]></content>
+  </entry>
+</search>

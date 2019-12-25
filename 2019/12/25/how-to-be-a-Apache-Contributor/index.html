@@ -1,0 +1,530 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.1.1">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+
+
+<script id="hexo-configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    hostname: new URL('http://yoursite.com').hostname,
+    root: '/',
+    scheme: 'Mist',
+    version: '7.6.0',
+    exturl: false,
+    sidebar: {"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},
+    copycode: {"enable":false,"show_result":false,"style":null},
+    back2top: {"enable":true,"sidebar":false,"scrollpercent":false},
+    bookmark: {"enable":false,"color":"#222","save":"auto"},
+    fancybox: false,
+    mediumzoom: false,
+    lazyload: false,
+    pangu: false,
+    comments: {"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},
+    algolia: {
+      appID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
+    path: 'search.xml',
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}
+  };
+</script>
+
+  <meta name="description" content="很好的文章 原文链接 以Apache Hudi为例，讲解如何通过一行代码成为Apache顶级项目的Contributor。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="how to be a Apache Contributor">
+<meta property="og:url" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2019&#x2F;12&#x2F;25&#x2F;how-to-be-a-Apache-Contributor&#x2F;index.html">
+<meta property="og:site_name" content="Comsir&#39;s Blog">
+<meta property="og:description" content="很好的文章 原文链接 以Apache Hudi为例，讲解如何通过一行代码成为Apache顶级项目的Contributor。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="c:%5CUsers%5C15732%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5Cimage-20191225114230586.png">
+<meta property="og:image" content="c:%5CUsers%5C15732%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5Cimage-20191225114745499.png">
+<meta property="article:published_time" content="2019-12-25T01:58:09.000Z">
+<meta property="article:modified_time" content="2019-12-25T03:48:02.324Z">
+<meta property="article:author" content="lingcheng">
+<meta property="article:tag" content="apache Hudi">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="c:%5CUsers%5C15732%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5Cimage-20191225114230586.png">
+
+<link rel="canonical" href="http://yoursite.com/2019/12/25/how-to-be-a-Apache-Contributor/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: true
+  };
+</script>
+
+  <title>how to be a Apache Contributor | Comsir's Blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Comsir's Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+  </div>
+
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-fw fa-user"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-fw fa-th"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>归档</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+
+</nav>
+  <div class="site-search">
+    <div class="popup search-popup">
+    <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocorrect="off" autocapitalize="none"
+           placeholder="搜索..." spellcheck="false"
+           type="text" id="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result"></div>
+
+</div>
+<div class="search-pop-overlay"></div>
+
+  </div>
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content">
+            
+
+  <div class="posts-expand">
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/12/25/how-to-be-a-Apache-Contributor/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/touxiang.jpg">
+      <meta itemprop="name" content="lingcheng">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Comsir's Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          how to be a Apache Contributor
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2019-12-25 09:58:09 / 修改时间：11:48:02" itemprop="dateCreated datePublished" datetime="2019-12-25T09:58:09+08:00">2019-12-25</time>
+            </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>很好的文章 <a href="https://mp.weixin.qq.com/s/A_OQkpnUSuBaBCYezGFzFw" target="_blank" rel="noopener">原文链接</a></p>
+<p>以Apache Hudi为例，讲解如何通过一行代码成为Apache顶级项目的Contributor。</p>
+<a id="more"></a>
+
+<h3 id="1-准备"><a href="#1-准备" class="headerlink" title="1. 准备"></a>1. 准备</h3><h4 id="1-1-Github准备"><a href="#1-1-Github准备" class="headerlink" title="1.1 Github准备"></a>1.1 Github准备</h4><p>1) 准备 <code>github</code>账号，通过<a href="https://github.com/join注册，记住注册的邮箱和用户名。" target="_blank" rel="noopener">https://github.com/join注册，记住注册的邮箱和用户名。</a></p>
+<p>2) Fork Apache Hudi项目(<a href="https://github.com/apache/incubator-hudi)至自己(TheApacheHudi)的远程仓库" target="_blank" rel="noopener">https://github.com/apache/incubator-hudi)至自己(TheApacheHudi)的远程仓库</a></p>
+<p>3) 将资源远程仓库clone至本地</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> git <span class="built_in">clone</span> https://github.com/comsir/incubator-hudi.git</span></span><br><span class="line">Cloning into 'incubator-hudi'...</span><br><span class="line">remote: Enumerating objects: 1, done.</span><br><span class="line">remote: Counting objects: 100% (1/1), done.</span><br><span class="line">remote: Total 24234 (delta 0), reused 0 (delta 0), pack-reused 24233</span><br><span class="line">Receiving objects: 100% (24234/24234), 9.79 MiB | 397.00 KiB/s, done.</span><br><span class="line">Resolving deltas: 100% (11736/11736), done.</span><br></pre></td></tr></table></figure>
+
+<p>4) 进入到incubator-hudi目录后添加Apache Hudi为<strong>upstream</strong></p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> git remote add upstream https://github.com/comsir/incubator-hudi.git</span></span><br></pre></td></tr></table></figure>
+
+<p>5) 使用 <code>git remote-v</code>查看项目状态，如下表示自己（TheApacheHudi）远程仓库为<strong>origin</strong>，而Apache远程仓库为<strong>upstream</strong></p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> git remote -v</span></span><br><span class="line">origin  https://github.com/comsir/incubator-hudi.git (fetch)</span><br><span class="line">origin  https://github.com/comsir/incubator-hudi.git (push)</span><br><span class="line">upstream        https://github.com/comsir/incubator-hudi.git (fetch)</span><br><span class="line">upstream        https://github.com/comsir/incubator-hudi.git (push)</span><br></pre></td></tr></table></figure>
+
+<p>6) 使用 <code>git config user.name xxx;git config user.email xxx</code>配置用户名和邮箱，注意用户名和邮箱需要使用注册Github使用的用户名和邮箱，这样后续才能正常显示 <code>Contributor</code>标志(如果以前已经配置过 可跳过)</p>
+<p>这样之后就可以自己修改代码了！</p>
+<h4 id="1-2-邮箱订阅"><a href="#1-2-邮箱订阅" class="headerlink" title="1.2 邮箱订阅"></a>1.2 邮箱订阅</h4><p>为方便参与社区讨论，请务必订阅<a href="mailto:dev@hudi.apache.org">dev@hudi.apache.org</a>开发者邮件列表，订阅方法很简单，只需向<a href="mailto:dev-subscribe@hudi.apache.org">dev-subscribe@hudi.apache.org</a>发送一封空邮件，然后马上会收到<a href="mailto:dev-help@hudi.apache.org">dev-help@hudi.apache.org</a>回复的一封邮件，然后对该邮件再点击最下方的回复按钮（以Google邮箱为例）进行一次回复即可（如回复comfirm）</p>
+<p>回复完之后会收到一封正式的欢迎邮件，表示已经订阅完成，后续便可参与社区的讨论</p>
+<h4 id="1-3-JIRA准备"><a href="#1-3-JIRA准备" class="headerlink" title="1.3 JIRA准备"></a>1.3 JIRA准备</h4><p>几乎所有Apache顶级项目都是通过JIRA来管理issue，所以注册JIRA账号必不可少。</p>
+<p>1) 准备jira账号，通过<a href="https://issues.apache.org/jira/secure/Signup!default.jspa注册，请记住JIRA" target="_blank" rel="noopener">https://issues.apache.org/jira/secure/Signup!default.jspa注册，请记住JIRA</a> ID，已有账号可直接登录。</p>
+<p>2) 查看HUDI所有issue（<a href="https://issues.apache.org/jira/projects/HUDI/issues）。" target="_blank" rel="noopener">https://issues.apache.org/jira/projects/HUDI/issues）。</a></p>
+<p>3) 若有合适的issue，可点击右侧的Assign to me(分配给我)，对于较为复杂的issue，可在issue下评论讨论实现思路，确保达成一致后再开始写代码。</p>
+<p>4) 若登录后发现无 <code>Assignto me（分配给我）</code>按钮，那么需要向<a href="mailto:dev@hudi.apache.org">dev@hudi.apache.org</a>邮箱发送一封JIRA权限开通申请邮件，可参照如下模版发送。</p>
+<p><em>Hi,</em></p>
+<p><em>I want to contribute to Apache Hudi. Would you please give me the contributor permission? My JIRA ID is xxx.</em></p>
+<p>当项目PMC看到邮件后，会给你开通相应权限（由于时差原因，回复可能有些延迟）。</p>
+<h4 id="1-4-Confluence准备"><a href="#1-4-Confluence准备" class="headerlink" title="1.4 Confluence准备"></a>1.4 Confluence准备</h4><p>同样，Apache顶级项目会通过Confluence来管理一些改进计划，如Hudi的RFC，当你想要对Hudi添加一些大的特性时，需要在Confluence创建RFC（<a href="https://cwiki.apache.org/confluence/display/HUDI/Apache+Hudi），若无权限，也需要向dev@hudi.apache.org邮箱发送一封申请邮件，与申请JIRA权限类似，带上自己的Confluence" target="_blank" rel="noopener">https://cwiki.apache.org/confluence/display/HUDI/Apache+Hudi），若无权限，也需要向dev@hudi.apache.org邮箱发送一封申请邮件，与申请JIRA权限类似，带上自己的Confluence</a> ID，会有PMC给你开通权限。几乎所有问题都可向<a href="mailto:dev@hudi.apache.org">dev@hudi.apache.org</a>邮箱求助。</p>
+<h3 id="2-提交代码"><a href="#2-提交代码" class="headerlink" title="2. 提交代码"></a>2. 提交代码</h3><p>对于一些初次参与社区的开发者而言，一种较好的上手方式就是 <code>fix typo</code>，即修复单词错误，比如，如下的单词错误</p>
+<p>1) 基于master分支checkout一个新分支</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> git checkout -b typofix</span></span><br><span class="line">Switched to a new branch 'typofix'</span><br><span class="line">M       hudi-common/src/main/java/org/apache/hudi/common/util/RocksDBDAO.java</span><br></pre></td></tr></table></figure>
+
+<p>2) 使用 <code>git add.</code>， <code>git commit-m&quot;[MINOR] fix typo&quot;</code>， <code>git push origin typofix:typofix</code>推至自己远端仓库</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> git add .</span></span><br><span class="line"></span><br><span class="line"><span class="meta">$</span><span class="bash"> git commit -m <span class="string">"[MINOR] fix typo"</span></span></span><br><span class="line">[typofix 1bfd61ca] [MINOR] fix typo</span><br><span class="line"> 1 file changed, 1 insertion(+), 1 deletion(-)</span><br><span class="line"></span><br><span class="line"><span class="meta">$</span><span class="bash"> git push origin typofix:typofix</span></span><br><span class="line">Enumerating objects: 23, done.</span><br><span class="line">Counting objects: 100% (23/23), done.</span><br><span class="line">Delta compression using up to 8 threads</span><br><span class="line">Compressing objects: 100% (9/9), done.</span><br><span class="line">Writing objects: 100% (12/12), 836 bytes | 418.00 KiB/s, done.</span><br><span class="line">Total 12 (delta 5), reused 0 (delta 0)</span><br><span class="line">remote: Resolving deltas: 100% (5/5), completed with 5 local objects.</span><br><span class="line">remote:</span><br><span class="line">remote: Create a pull request for 'typofix' on GitHub by visiting:</span><br><span class="line">remote:      https://github.com/comsir/incubator-hudi/pull/new/typofix</span><br><span class="line">remote:</span><br><span class="line">To https://github.com/comsir/incubator-hudi.git</span><br><span class="line"> * [new branch]        typofix -&gt; typofix</span><br></pre></td></tr></table></figure>
+
+
+
+<p>3) 进入Apache/Hudi github页面，会出现 <code>Compare&amp;pull request</code>按钮</p>
+<p>4) 点击 <code>Compare&amp;pull request</code>，补充PR描述信息后，点击 <code>Createpull request</code>即可</p>
+<p><img src="C:%5CUsers%5C15732%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5Cimage-20191225114230586.png" alt="image-20191225114230586"></p>
+<p>5) 这样便完成提交PR的过程，后续等待committer帮忙review代码、根据意见修改代码和合并PR，当合并后，恭喜你，正式成为Apache顶级项目的contributor</p>
+<p><img src="C:%5CUsers%5C15732%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5Cimage-20191225114745499.png" alt="image-20191225114745499"></p>
+<p>当然上述 <code>typo fix</code>可用作熟悉整体流程，一旦熟悉后，可尝试进行一些bug fix或开发新的feature、回答邮件列表问题、参与邮件列表讨论等，都会有助于更快速成为committer。</p>
+<p>对于Apache Hudi项目，现在还有些非常简单的任务可供新手上手，如<a href="https://issues.apache.org/jira/browse/HUDI-233（使用SLF4J重做项目日志）；https://issues.apache.org/jira/browse/HUDI-385（scala" target="_blank" rel="noopener">https://issues.apache.org/jira/browse/HUDI-233（使用SLF4J重做项目日志）；https://issues.apache.org/jira/browse/HUDI-385（scala</a> checkstyle处理），欢迎想要参与社区的开发者认领issue，成为Apache的contributor。</p>
+<p><strong>其他Apache顶级项目（如Flink/Spark/HBase）的社区参与与上述步骤类似。</strong></p>
+<h3 id="2-总结"><a href="#2-总结" class="headerlink" title="2. 总结"></a>2. 总结</h3><p>想成为Apache的contributor或熟悉PR提交流程，一种简单参考样例是通过 <code>typo fix</code>上手，熟悉流程后可做更多事情，这样可早日成为Apache committer。</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/apache-Hudi/" rel="tag"># apache Hudi</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2019/12/20/DDoS%E6%94%BB%E5%87%BB%E4%BB%8B%E7%BB%8D%EF%BC%88%E4%B8%80%EF%BC%89-%E5%8E%9F%E7%90%86/" rel="prev" title="DDoS攻击介绍（一） 原理">
+      <i class="fa fa-chevron-left"></i> DDoS攻击介绍（一） 原理
+    </a></div>
+      <div class="post-nav-item"></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+  </div>
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let activeClass = CONFIG.comments.activeClass;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-准备"><span class="nav-number">1.</span> <span class="nav-text">1. 准备</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-1-Github准备"><span class="nav-number">1.1.</span> <span class="nav-text">1.1 Github准备</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#1-2-邮箱订阅"><span class="nav-number">1.2.</span> <span class="nav-text">1.2 邮箱订阅</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#1-3-JIRA准备"><span class="nav-number">1.3.</span> <span class="nav-text">1.3 JIRA准备</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#1-4-Confluence准备"><span class="nav-number">1.4.</span> <span class="nav-text">1.4 Confluence准备</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-提交代码"><span class="nav-number">2.</span> <span class="nav-text">2. 提交代码</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-总结"><span class="nav-number">3.</span> <span class="nav-text">2. 总结</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="lingcheng"
+      src="/images/touxiang.jpg">
+  <p class="site-author-name" itemprop="name">lingcheng</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">5</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">2</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">3</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">lingcheng</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v4.1.1
+  </div>
+  <span class="post-meta-divider">|</span>
+  <div class="theme-info">主题 – <a href="https://mist.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Mist</a> v7.6.0
+  </div>
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

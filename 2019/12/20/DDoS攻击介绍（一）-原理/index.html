@@ -1,0 +1,499 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.1.1">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+
+
+<script id="hexo-configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    hostname: new URL('http://yoursite.com').hostname,
+    root: '/',
+    scheme: 'Mist',
+    version: '7.6.0',
+    exturl: false,
+    sidebar: {"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},
+    copycode: {"enable":false,"show_result":false,"style":null},
+    back2top: {"enable":true,"sidebar":false,"scrollpercent":false},
+    bookmark: {"enable":false,"color":"#222","save":"auto"},
+    fancybox: false,
+    mediumzoom: false,
+    lazyload: false,
+    pangu: false,
+    comments: {"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},
+    algolia: {
+      appID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
+    path: 'search.xml',
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}
+  };
+</script>
+
+  <meta name="description" content="一、DoS介绍DoS全称为拒绝服务 。是一种实现简单又很有效的针对服务器进行的攻击方式，其目的就是让被攻击的主机和服务器拒绝正常用户的访问，造成服务器的瘫痪。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="DDoS攻击介绍（一） 原理">
+<meta property="og:url" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2019&#x2F;12&#x2F;20&#x2F;DDoS%E6%94%BB%E5%87%BB%E4%BB%8B%E7%BB%8D%EF%BC%88%E4%B8%80%EF%BC%89-%E5%8E%9F%E7%90%86&#x2F;index.html">
+<meta property="og:site_name" content="Comsir&#39;s Blog">
+<meta property="og:description" content="一、DoS介绍DoS全称为拒绝服务 。是一种实现简单又很有效的针对服务器进行的攻击方式，其目的就是让被攻击的主机和服务器拒绝正常用户的访问，造成服务器的瘫痪。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="c:%5CUsers%5C15732%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5Cimage-20191220211529981.png">
+<meta property="article:published_time" content="2019-12-20T13:09:58.000Z">
+<meta property="article:modified_time" content="2019-12-20T13:25:17.684Z">
+<meta property="article:author" content="lingcheng">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="c:%5CUsers%5C15732%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5Cimage-20191220211529981.png">
+
+<link rel="canonical" href="http://yoursite.com/2019/12/20/DDoS%E6%94%BB%E5%87%BB%E4%BB%8B%E7%BB%8D%EF%BC%88%E4%B8%80%EF%BC%89-%E5%8E%9F%E7%90%86/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: true
+  };
+</script>
+
+  <title>DDoS攻击介绍（一） 原理 | Comsir's Blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Comsir's Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+  </div>
+
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-fw fa-user"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-fw fa-th"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>归档</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+
+</nav>
+  <div class="site-search">
+    <div class="popup search-popup">
+    <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocorrect="off" autocapitalize="none"
+           placeholder="搜索..." spellcheck="false"
+           type="text" id="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result"></div>
+
+</div>
+<div class="search-pop-overlay"></div>
+
+  </div>
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content">
+            
+
+  <div class="posts-expand">
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/12/20/DDoS%E6%94%BB%E5%87%BB%E4%BB%8B%E7%BB%8D%EF%BC%88%E4%B8%80%EF%BC%89-%E5%8E%9F%E7%90%86/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/touxiang.jpg">
+      <meta itemprop="name" content="lingcheng">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Comsir's Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          DDoS攻击介绍（一） 原理
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2019-12-20 21:09:58 / 修改时间：21:25:17" itemprop="dateCreated datePublished" datetime="2019-12-20T21:09:58+08:00">2019-12-20</time>
+            </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h2 id="一、DoS介绍"><a href="#一、DoS介绍" class="headerlink" title="一、DoS介绍"></a>一、DoS介绍</h2><p>DoS全称为拒绝服务 。是一种实现简单又很有效的针对服务器进行的攻击方式，其目的就是让被攻击的主机和服务器拒绝正常用户的访问，造成服务器的瘫痪。</p>
+<a id="more"></a>
+
+<p>攻击的基本流程为：</p>
+<p>1.攻击者向目标服务器发出大量的虚假IP地址服务请求</p>
+<p>2.被攻击者在接受到请求之后，返回确认信息并等待攻击者的确认（TCP三次握手）</p>
+<p>3.由于攻击者发送的信息都是虚假的，所以被攻击服务器无法接受到确认信息从而一直处于等待状态</p>
+<p>而服务器分配给这次请求的资源却被一直占用无法被释放。</p>
+<p>4.当被攻击者等待回复超时时，链接会中断，这是攻击者再次发送新的虚假服务请求。</p>
+<p>5.就这样，服务器资源不断地被占用，直到瘫痪。</p>
+<h2 id="二、DDoS介绍"><a href="#二、DDoS介绍" class="headerlink" title="二、DDoS介绍"></a>二、DDoS介绍</h2><p>DDoS全程为分布式拒绝服务，是在DoS基础之上进行的更大规模，更大范围的攻击方式。</p>
+<p>Dos只是单机与单机之间的攻击模式 ，而DDoS是利用一批受控制的僵尸主机向目标服务器或者网络发起攻击，其攻击的强度和带来的危险都比DoS大的多。</p>
+<p>DDoS的攻击过程如下图所示：</p>
+<p><img src="C:%5CUsers%5C15732%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5Cimage-20191220211529981.png" alt="image-20191220211529981"></p>
+<p>​        首先，DDoS攻击者控制一批傀儡机，即在网络上发现系统具有相关漏洞的主机，然后进行人侵、安装控制程序，入侵的越多，控制的傀儡机就越多，攻击源就更多。然后把被控制的僵尸主机进行分配，一部分充当攻击的主要控制端，一部分充当攻击源。控制端只负责发送攻击者的控制命令而不参与实际的发包攻击，而傀儡机只负责向目标发送DDoS攻击数据包。整个僵尸网络，在攻击者统一的指挥下，对被攻击的服务器发起攻击，致使目标网络或者服务器瘫痪。</p>
+<p>​        由于这种攻击模式下，攻击者深藏在幕后，而且控制器和傀儡机间的通信，和正常的主机间的通信没有区别，因此攻击者很难被监控系统跟踪，DDoS攻击者的隐蔽性极强，这也对DDoS的反向追踪带来了很大的难度。<br>DDoS攻击能够成为黑客的“宠儿”，主要由于以下几个原因：</p>
+<p>１、成本低：在日常，很多网络用户的操作系统并不会及时更新系统，修补漏洞。这样造成了黑客可以通过极为廉价的成本就可以在网络上获得大量的僵尸主机，从而构建大规模的僵尸网络。<br>２、规模大：如今社会生活的方方面面都在数字化，网络终端数目极为庞大，黑客可控的僵尸网络种类越来越多，规模越来越大。<br>３、隐蔽性强：如上面所讲，僵尸网络给攻击者提供了强大的掩护，给DDoS攻击的反向追踪带来了极大的难度。<br>４、攻击方式多样：DDoS有着繁多的攻击模式，变种多，相应的防御难度大。<br>５、门槛低，利益大：由于背后黑色产业链的日趋成熟，大量攻击道具的出现，极度降低了成为DDoS攻击者的门槛，同时背后利益链条的庞大，也是主要推动DDoS攻击频发的因素。</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2019/12/17/Flink%E5%AE%9E%E6%88%98%EF%BC%88%E4%B8%80%EF%BC%89%EF%BC%9A%E8%AE%A2%E5%8D%95%E6%94%AF%E4%BB%98%E5%AE%9E%E6%97%B6%E7%9B%91%E6%8E%A7/" rel="prev" title="Flink实战（一）：订单支付实时监控">
+      <i class="fa fa-chevron-left"></i> Flink实战（一）：订单支付实时监控
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2019/12/25/how-to-be-a-Apache-Contributor/" rel="next" title="how to be a Apache Contributor">
+      how to be a Apache Contributor <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+  </div>
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let activeClass = CONFIG.comments.activeClass;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#一、DoS介绍"><span class="nav-number">1.</span> <span class="nav-text">一、DoS介绍</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#二、DDoS介绍"><span class="nav-number">2.</span> <span class="nav-text">二、DDoS介绍</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="lingcheng"
+      src="/images/touxiang.jpg">
+  <p class="site-author-name" itemprop="name">lingcheng</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">5</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">2</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">3</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">lingcheng</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v4.1.1
+  </div>
+  <span class="post-meta-divider">|</span>
+  <div class="theme-info">主题 – <a href="https://mist.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Mist</a> v7.6.0
+  </div>
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>
