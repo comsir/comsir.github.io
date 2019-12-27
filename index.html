@@ -205,6 +205,78 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/12/27/Web-Crawler/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/touxiang.jpg">
+      <meta itemprop="name" content="lingcheng">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Comsir's Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+            <a href="/2019/12/27/Web-Crawler/" class="post-title-link" itemprop="url">Web Crawler</a>
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2019-12-27 09:54:31 / 修改时间：17:36:58" itemprop="dateCreated datePublished" datetime="2019-12-27T09:54:31+08:00">2019-12-27</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h3 id="学习爬虫"><a href="#学习爬虫" class="headerlink" title="学习爬虫"></a>学习爬虫</h3><h4 id="第一步：第一个爬虫"><a href="#第一步：第一个爬虫" class="headerlink" title="第一步：第一个爬虫"></a>第一步：第一个爬虫</h4><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#! /usr/bin/python</span></span><br><span class="line"><span class="comment">#coding:UTF-8</span></span><br><span class="line"><span class="keyword">import</span> requests</span><br><span class="line">link = <span class="string">"https://comsir.github.io/"</span></span><br><span class="line">headers = &#123;<span class="string">'User-agent'</span>:<span class="string">'Mozilla/5.0 (Windows; U; Windows NT 6.1; en-US; rv:1.9.1.6) Gecko/20091201 FireFox/3.5.6'</span>&#125;</span><br><span class="line">r = requests.get(link, headers = headers)</span><br><span class="line">print(r.text)</span><br></pre></td></tr></table></figure>
+
+<p>爬取 <a href="https://comsir.github.io/" target="_blank" rel="noopener">我的博客</a>首页的所有内容 </p>
+<p>使用requests.get(link, headers= headers)获取网页</p>
+<p>用requests的headers伪装成浏览器访问。</p>
+<p>r是requests的Response回复对象，我们从中可以获取想要的信息。r.text是获取的网页内容代码。</p>
+<h4 id="第二步：提取需要的数据"><a href="#第二步：提取需要的数据" class="headerlink" title="第二步：提取需要的数据"></a>第二步：提取需要的数据</h4>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2019/12/27/Web-Crawler/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+        
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/12/26/Ended-with-marriage/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -687,7 +759,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">6</span>
+          <span class="site-state-item-count">7</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
