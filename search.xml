@@ -1,6 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>油管操作原理</title>
+    <url>/2020/01/10/%E6%B2%B9%E7%AE%A1%E6%93%8D%E4%BD%9C%E5%8E%9F%E7%90%86/</url>
+    <content><![CDATA[<p>VPN概念：虚拟专用网络（Virtual private NetWork）主要是在共用网路上建立专用网络，进行加密通信</p>
+<p>比如 学校外要访问学校内网的服务器的资料</p>
+<p>VPN解决方法：就在学校内部设置一台VPN的服务器 ，有两快网卡，一个公网的，一个内网的</p>
+<p>公网的网卡接受来自网络的请求，通过内网网卡调用请求需要的数据，加密封装数据包，返回给公网请求</p>
+<p>翻墙原理：首先我们访问的发出的数据包在公网上 访问的时候VPN 服务器的IP，不会被墙掉，然后VPN服务器 都是在国外的 所以通过VPN包装后，就可以请求谷歌等网站，然后再返回数据包即可</p>
+<a id="more"></a>]]></content>
+  </entry>
+  <entry>
     <title>Python-爬取腾讯视频</title>
     <url>/2020/01/04/Python-%E7%88%AC%E5%8F%96%E8%85%BE%E8%AE%AF%E8%A7%86%E9%A2%91/</url>
     <content><![CDATA[<h3 id="第一步-准备"><a href="#第一步-准备" class="headerlink" title="第一步 准备"></a>第一步 准备</h3><p>分析腾讯视频的vids</p>
