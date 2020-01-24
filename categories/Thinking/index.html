@@ -46,21 +46,15 @@
   };
 </script>
 
-  <meta name="description" content="一、DoS介绍DoS全称为拒绝服务 。是一种实现简单又很有效的针对服务器进行的攻击方式，其目的就是让被攻击的主机和服务器拒绝正常用户的访问，造成服务器的瘫痪。">
-<meta property="og:type" content="article">
-<meta property="og:title" content="DDoS攻击介绍（一） 原理">
-<meta property="og:url" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2019&#x2F;12&#x2F;20&#x2F;DDoS%E6%94%BB%E5%87%BB%E4%BB%8B%E7%BB%8D%EF%BC%88%E4%B8%80%EF%BC%89-%E5%8E%9F%E7%90%86&#x2F;index.html">
+  <meta property="og:type" content="website">
+<meta property="og:title" content="Comsir&#39;s Blog">
+<meta property="og:url" content="http:&#x2F;&#x2F;yoursite.com&#x2F;categories&#x2F;Thinking&#x2F;index.html">
 <meta property="og:site_name" content="Comsir&#39;s Blog">
-<meta property="og:description" content="一、DoS介绍DoS全称为拒绝服务 。是一种实现简单又很有效的针对服务器进行的攻击方式，其目的就是让被攻击的主机和服务器拒绝正常用户的访问，造成服务器的瘫痪。">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="c:%5CUsers%5C15732%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5Cimage-20191220211529981.png">
-<meta property="article:published_time" content="2019-12-20T13:09:58.000Z">
-<meta property="article:modified_time" content="2019-12-20T13:25:17.684Z">
 <meta property="article:author" content="lingcheng">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="c:%5CUsers%5C15732%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5Cimage-20191220211529981.png">
 
-<link rel="canonical" href="http://yoursite.com/2019/12/20/DDoS%E6%94%BB%E5%87%BB%E4%BB%8B%E7%BB%8D%EF%BC%88%E4%B8%80%EF%BC%89-%E5%8E%9F%E7%90%86/">
+<link rel="canonical" href="http://yoursite.com/categories/Thinking/">
 
 
 <script id="page-configurations">
@@ -68,11 +62,11 @@
   CONFIG.page = {
     sidebar: "",
     isHome: false,
-    isPost: true
+    isPost: false
   };
 </script>
 
-  <title>DDoS攻击介绍（一） 原理 | Comsir's Blog</title>
+  <title>分类: Thinking | Comsir's Blog</title>
   
 
 
@@ -206,104 +200,50 @@
           <div class="content">
             
 
-  <div class="posts-expand">
-      
   
   
-  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/12/20/DDoS%E6%94%BB%E5%87%BB%E4%BB%8B%E7%BB%8D%EF%BC%88%E4%B8%80%EF%BC%89-%E5%8E%9F%E7%90%86/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/touxiang.jpg">
-      <meta itemprop="name" content="lingcheng">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Comsir's Blog">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          DDoS攻击介绍（一） 原理
+  
+  <div class="post-block">
+    <div class="posts-collapse">
+      <div class="collection-title">
+        <h1 class="collection-header">Thinking
+          <small>分类</small>
         </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              
-
-              <time title="创建时间：2019-12-20 21:09:58 / 修改时间：21:25:17" itemprop="dateCreated datePublished" datetime="2019-12-20T21:09:58+08:00">2019-12-20</time>
-            </span>
-
-          
-            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-eye"></i>
-              </span>
-              <span class="post-meta-item-text">阅读次数：</span>
-              <span id="busuanzi_value_page_pv"></span>
-            </span>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
+      </div>
 
       
-        <h2 id="一、DoS介绍"><a href="#一、DoS介绍" class="headerlink" title="一、DoS介绍"></a>一、DoS介绍</h2><p>DoS全称为拒绝服务 。是一种实现简单又很有效的针对服务器进行的攻击方式，其目的就是让被攻击的主机和服务器拒绝正常用户的访问，造成服务器的瘫痪。</p>
-<a id="more"></a>
-
-<p>攻击的基本流程为：</p>
-<p>1.攻击者向目标服务器发出大量的虚假IP地址服务请求</p>
-<p>2.被攻击者在接受到请求之后，返回确认信息并等待攻击者的确认（TCP三次握手）</p>
-<p>3.由于攻击者发送的信息都是虚假的，所以被攻击服务器无法接受到确认信息从而一直处于等待状态</p>
-<p>而服务器分配给这次请求的资源却被一直占用无法被释放。</p>
-<p>4.当被攻击者等待回复超时时，链接会中断，这是攻击者再次发送新的虚假服务请求。</p>
-<p>5.就这样，服务器资源不断地被占用，直到瘫痪。</p>
-<h2 id="二、DDoS介绍"><a href="#二、DDoS介绍" class="headerlink" title="二、DDoS介绍"></a>二、DDoS介绍</h2><p>DDoS全程为分布式拒绝服务，是在DoS基础之上进行的更大规模，更大范围的攻击方式。</p>
-<p>Dos只是单机与单机之间的攻击模式 ，而DDoS是利用一批受控制的僵尸主机向目标服务器或者网络发起攻击，其攻击的强度和带来的危险都比DoS大的多。</p>
-<p>DDoS的攻击过程如下图所示：</p>
-<p><img src="C:%5CUsers%5C15732%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5Cimage-20191220211529981.png" alt="image-20191220211529981"></p>
-<p>​        首先，DDoS攻击者控制一批傀儡机，即在网络上发现系统具有相关漏洞的主机，然后进行人侵、安装控制程序，入侵的越多，控制的傀儡机就越多，攻击源就更多。然后把被控制的僵尸主机进行分配，一部分充当攻击的主要控制端，一部分充当攻击源。控制端只负责发送攻击者的控制命令而不参与实际的发包攻击，而傀儡机只负责向目标发送DDoS攻击数据包。整个僵尸网络，在攻击者统一的指挥下，对被攻击的服务器发起攻击，致使目标网络或者服务器瘫痪。</p>
-<p>​        由于这种攻击模式下，攻击者深藏在幕后，而且控制器和傀儡机间的通信，和正常的主机间的通信没有区别，因此攻击者很难被监控系统跟踪，DDoS攻击者的隐蔽性极强，这也对DDoS的反向追踪带来了很大的难度。<br>DDoS攻击能够成为黑客的“宠儿”，主要由于以下几个原因：</p>
-<p>１、成本低：在日常，很多网络用户的操作系统并不会及时更新系统，修补漏洞。这样造成了黑客可以通过极为廉价的成本就可以在网络上获得大量的僵尸主机，从而构建大规模的僵尸网络。<br>２、规模大：如今社会生活的方方面面都在数字化，网络终端数目极为庞大，黑客可控的僵尸网络种类越来越多，规模越来越大。<br>３、隐蔽性强：如上面所讲，僵尸网络给攻击者提供了强大的掩护，给DDoS攻击的反向追踪带来了极大的难度。<br>４、攻击方式多样：DDoS有着繁多的攻击模式，变种多，相应的防御难度大。<br>５、门槛低，利益大：由于背后黑色产业链的日趋成熟，大量攻击道具的出现，极度降低了成为DDoS攻击者的门槛，同时背后利益链条的庞大，也是主要推动DDoS攻击频发的因素。</p>
-
+    <div class="collection-year">
+      <h1 class="collection-header">2020</h1>
     </div>
 
-    
-    
-    
+  <article itemscope itemtype="http://schema.org/Article">
+    <header class="post-header">
 
-      <footer class="post-footer">
+      <div class="post-meta">
+        <time itemprop="dateCreated"
+              datetime="2020-01-25T02:46:43+08:00"
+              content="2020-01-25">
+          01-25
+        </time>
+      </div>
 
-        
+      <h2 class="post-title">
+          <a class="post-title-link" href="/2020/01/25/thinking-in-new-year/" itemprop="url">
+            <span itemprop="name">thinking in new year</span>
+          </a>
+      </h2>
 
-
-        
-    <div class="post-nav">
-      <div class="post-nav-item">
-    <a href="/2019/12/17/Flink%E5%AE%9E%E6%88%98%EF%BC%88%E4%B8%80%EF%BC%89%EF%BC%9A%E8%AE%A2%E5%8D%95%E6%94%AF%E4%BB%98%E5%AE%9E%E6%97%B6%E7%9B%91%E6%8E%A7/" rel="prev" title="Flink实战（一）：订单支付实时监控">
-      <i class="fa fa-chevron-left"></i> Flink实战（一）：订单支付实时监控
-    </a></div>
-      <div class="post-nav-item">
-    <a href="/2019/12/25/how-to-be-a-Apache-Contributor/" rel="next" title="how to be a Apache Contributor">
-      how to be a Apache Contributor <i class="fa fa-chevron-right"></i>
-    </a></div>
-    </div>
-      </footer>
-    
+    </header>
   </article>
+
+    </div>
+  </div>
   
   
   
 
-  </div>
+  
+
 
 
           </div>
@@ -354,7 +294,6 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#一、DoS介绍"><span class="nav-number">1.</span> <span class="nav-text">一、DoS介绍</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#二、DDoS介绍"><span class="nav-number">2.</span> <span class="nav-text">二、DDoS介绍</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 
