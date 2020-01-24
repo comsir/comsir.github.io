@@ -15,7 +15,7 @@
 <p>我的人生公式：自律 = 思考 + 不急躁</p>
 ]]></content>
       <categories>
-        <category>Thinking</category>
+        <category>Daily</category>
       </categories>
       <tags>
         <tag>Daily</tag>
@@ -30,6 +30,12 @@
 <p>公网的网卡接受来自网络的请求，通过内网网卡调用请求需要的数据，加密封装数据包，返回给公网请求</p>
 <p>翻墙原理：首先我们访问的发出的数据包在公网上 访问的时候VPN 服务器的IP，不会被墙掉，然后VPN服务器 都是在国外的 所以通过VPN包装后，就可以请求谷歌等网站，然后再返回数据包即可</p>
 <a id="more"></a>]]></content>
+      <categories>
+        <category>NetWork</category>
+      </categories>
+      <tags>
+        <tag>NetWork</tag>
+      </tags>
   </entry>
   <entry>
     <title>Python-爬取腾讯视频</title>
@@ -65,8 +71,11 @@
 <figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment">#爬取腾讯视频</span></span><br><span class="line"><span class="keyword">import</span> requests</span><br><span class="line"><span class="keyword">import</span> re</span><br><span class="line">vids = <span class="string">"z0896013sun"</span></span><br><span class="line">headers = &#123; <span class="string">'User-Agent'</span>:<span class="string">'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/62.0.3202.94 Safari/537.36'</span>&#125;</span><br><span class="line">json_url = <span class="string">'http://vv.video.qq.com/getinfo?vids=&#123;&#125;&amp;platform=101001&amp;charge=0&amp;otype=json&amp;defn=shd'</span>.format(vids)</span><br><span class="line">response = requests.get(json_url, headers = headers)</span><br><span class="line">json_text = response.text</span><br><span class="line"><span class="comment"># print(json_text)</span></span><br><span class="line">pattern=re.compile(<span class="string">r'"fn":"(.*?.mp4)".*?"fvkey":"(.*?)".*?"ti":"(.*?)".*?"url":"(.*?)"'</span>,re.I)</span><br><span class="line">item=re.findall(pattern,json_text)</span><br><span class="line">print(item)</span><br><span class="line">video_url = item[<span class="number">0</span>][<span class="number">3</span>] + item[<span class="number">0</span>][<span class="number">0</span>] + <span class="string">'?vkey='</span> + item[<span class="number">0</span>][<span class="number">1</span>]</span><br><span class="line">title = item[<span class="number">0</span>][<span class="number">2</span>]</span><br><span class="line">res = requests.get(video_url, stream=<span class="literal">True</span>, headers=headers)</span><br><span class="line"><span class="keyword">with</span> open(<span class="string">'&#123;&#125;.mp4'</span>.format(title),<span class="string">'ab'</span>) <span class="keyword">as</span> f:</span><br><span class="line">    f.write(res.content)</span><br><span class="line">    f.flush()</span><br></pre></td></tr></table></figure>
 
 ]]></content>
+      <categories>
+        <category>Python</category>
+      </categories>
       <tags>
-        <tag>-Python</tag>
+        <tag>Python</tag>
       </tags>
   </entry>
   <entry>
@@ -104,6 +113,12 @@
 <figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment"># -*- coding: utf-8 -*-</span></span><br><span class="line"> </span><br><span class="line"><span class="keyword">import</span> requests</span><br><span class="line"><span class="keyword">from</span> bs4 <span class="keyword">import</span> BeautifulSoup</span><br><span class="line"><span class="keyword">import</span> time</span><br><span class="line">headers=&#123;</span><br><span class="line">        <span class="string">'User-Agent'</span>:<span class="string">'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/62.0.3202.94 Safari/537.36'</span></span><br><span class="line">        &#125;</span><br><span class="line">total=[]</span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">get_loupan</span><span class="params">(url)</span>:</span></span><br><span class="line">    <span class="keyword">try</span>:</span><br><span class="line">        res=requests.get(url,headers=headers)</span><br><span class="line">        soup=BeautifulSoup(res.text,<span class="string">'html.parser'</span>)</span><br><span class="line">        titles=soup.find_all(<span class="string">'span'</span>,class_=<span class="string">'items-name'</span>)</span><br><span class="line">        title=list(map(<span class="keyword">lambda</span> x:x.text,titles))</span><br><span class="line">        dizhis=soup.find_all(<span class="string">'span'</span>,class_=<span class="string">'list-map'</span>)</span><br><span class="line">        dizhi=list(map(<span class="keyword">lambda</span> x:x.text,dizhis))</span><br><span class="line">        diqus=soup.find_all(<span class="string">'span'</span>,class_=<span class="string">'list-map'</span>)</span><br><span class="line">        diqu=list(map(<span class="keyword">lambda</span> x:x.text.split(<span class="string">'\xa0'</span>)[<span class="number">1</span>],diqus))</span><br><span class="line">        mianjis_quan=soup.find_all(<span class="string">'a'</span>,class_=<span class="string">'huxing'</span>)</span><br><span class="line">        mianji_quan=list(map(<span class="keyword">lambda</span> x:x.text,mianjis_quan))</span><br><span class="line">        mianjis=soup.find_all(<span class="string">'a'</span>,class_=<span class="string">'huxing'</span>)</span><br><span class="line">        mianji=list(map(<span class="keyword">lambda</span> x:x.text.split(<span class="string">'\t'</span>)[<span class="number">-1</span>].strip(),mianjis))</span><br><span class="line">        jiages=soup.find_all(<span class="string">'a'</span>,class_=<span class="string">'favor-pos'</span>)</span><br><span class="line">        jiage=list(map(<span class="keyword">lambda</span> x:x.p.text,jiages))</span><br><span class="line">        <span class="keyword">for</span> tit,dizhi,diqu,mianq,mianj,jiage <span class="keyword">in</span> zip(title,dizhi,diqu,mianji_quan,mianji,jiage):</span><br><span class="line">            info=&#123;<span class="string">'标题'</span>:tit,</span><br><span class="line">                  <span class="string">'地址'</span>:dizhi,</span><br><span class="line">                  <span class="string">'地区'</span>:diqu,</span><br><span class="line">                  <span class="string">'面积（全）'</span>:mianq,</span><br><span class="line">                  <span class="string">'面积'</span>:mianj,</span><br><span class="line">                  <span class="string">'价格'</span>:jiage&#125;</span><br><span class="line">            total.append(info)</span><br><span class="line">    <span class="keyword">except</span>:</span><br><span class="line">        print(<span class="string">''</span>)</span><br><span class="line">    <span class="keyword">return</span> total</span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">1</span>,<span class="number">21</span>):</span><br><span class="line">        <span class="comment">#https://beijing.anjuke.com/sale/p1/#filtersort</span></span><br><span class="line">        url=<span class="string">'https://su.fang.anjuke.com/loupan/all/p&#123;&#125;/'</span>.format(i)</span><br><span class="line">        get_loupan(url)</span><br><span class="line">        print(<span class="string">'第&#123;&#125;页抓取完毕'</span>.format(i))</span><br><span class="line">        time.sleep(<span class="number">1</span>)</span><br><span class="line"><span class="keyword">import</span> pandas <span class="keyword">as</span> pd</span><br><span class="line">df=pd.DataFrame(total)</span><br><span class="line">df.to_excel(<span class="string">'安居客_苏州.xls'</span>)</span><br></pre></td></tr></table></figure>
 
 ]]></content>
+      <categories>
+        <category>Python</category>
+      </categories>
+      <tags>
+        <tag>Python</tag>
+      </tags>
   </entry>
   <entry>
     <title>Ended with marriage</title>
@@ -308,8 +323,11 @@
 <p>这真的是我想要的一生吗？</p>
 <p><strong>当然不是 以此为戒！！</strong></p>
 ]]></content>
+      <categories>
+        <category>Daily</category>
+      </categories>
       <tags>
-        <tag>Talk</tag>
+        <tag>Daily</tag>
       </tags>
   </entry>
   <entry>
@@ -362,8 +380,11 @@
 <p><strong>其他Apache顶级项目（如Flink/Spark/HBase）的社区参与与上述步骤类似。</strong></p>
 <h3 id="2-总结"><a href="#2-总结" class="headerlink" title="2. 总结"></a>2. 总结</h3><p>想成为Apache的contributor或熟悉PR提交流程，一种简单参考样例是通过 <code>typo fix</code>上手，熟悉流程后可做更多事情，这样可早日成为Apache committer。</p>
 ]]></content>
+      <categories>
+        <category>openSource</category>
+      </categories>
       <tags>
-        <tag>apache Hudi</tag>
+        <tag>openSource</tag>
       </tags>
   </entry>
   <entry>
@@ -387,6 +408,12 @@
 <p>​        由于这种攻击模式下，攻击者深藏在幕后，而且控制器和傀儡机间的通信，和正常的主机间的通信没有区别，因此攻击者很难被监控系统跟踪，DDoS攻击者的隐蔽性极强，这也对DDoS的反向追踪带来了很大的难度。<br>DDoS攻击能够成为黑客的“宠儿”，主要由于以下几个原因：</p>
 <p>１、成本低：在日常，很多网络用户的操作系统并不会及时更新系统，修补漏洞。这样造成了黑客可以通过极为廉价的成本就可以在网络上获得大量的僵尸主机，从而构建大规模的僵尸网络。<br>２、规模大：如今社会生活的方方面面都在数字化，网络终端数目极为庞大，黑客可控的僵尸网络种类越来越多，规模越来越大。<br>３、隐蔽性强：如上面所讲，僵尸网络给攻击者提供了强大的掩护，给DDoS攻击的反向追踪带来了极大的难度。<br>４、攻击方式多样：DDoS有着繁多的攻击模式，变种多，相应的防御难度大。<br>５、门槛低，利益大：由于背后黑色产业链的日趋成熟，大量攻击道具的出现，极度降低了成为DDoS攻击者的门槛，同时背后利益链条的庞大，也是主要推动DDoS攻击频发的因素。</p>
 ]]></content>
+      <categories>
+        <category>NetWork</category>
+      </categories>
+      <tags>
+        <tag>NetWork</tag>
+      </tags>
   </entry>
   <entry>
     <title>Flink实战（一）：订单支付实时监控</title>
@@ -506,5 +533,11 @@
     <url>/2019/12/17/Say-hello-to-the-world/</url>
     <content><![CDATA[<p>博学之，审问之，慎思之</p>
 ]]></content>
+      <categories>
+        <category>Daily</category>
+      </categories>
+      <tags>
+        <tag>Daily</tag>
+      </tags>
   </entry>
 </search>
